@@ -29,10 +29,10 @@ function Header() {
   return (
     <header className="py-3 shadow bg-gray-500">
       <Container>
-        <nav className="flex">
+        <nav className="flex justify-around">
           {/* put logo */}
           {/* put search box */}
-          <ul>
+          <ul className="flex justify-around items-center gap-8">
             {navItems.map((item) =>
               item.active ? (
                 <li key={item.name}>

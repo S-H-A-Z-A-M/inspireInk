@@ -4,7 +4,7 @@ import Button from "@/components/container/Button";
 import Input from "../container/Input";
 import RTE from "../container/RTE";
 // import Select from "../container/Select";
-import { useSelector, UseSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function PostForm({ post }) {
@@ -20,16 +20,15 @@ function PostForm({ post }) {
   const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
-    if(post){
+    if (post) {
       // update the post
       // update the file
       // delete previous file
       // then navigate the user to post page
-    }else{
+    } else {
       // save the post
       // upload the file
       // then navigate the user to post page
-      
     }
   };
 
@@ -44,11 +43,12 @@ function PostForm({ post }) {
   }, []);
 
   React.useEffect(() => {
-    watch((value, { name }) => {
+    const subscription = watch((value, { name }) => {
       if (name === "title") {
         setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
     });
+    return ()=> subscription.unsubscribe();
   }, [watch, slugTransform, setValue]);
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">

@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/authSlice";
 
-function signup() {
+function Signup() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const dispatch = useDispatch();
@@ -24,15 +24,15 @@ function signup() {
     }
   };
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center mt-4">
       <div
         className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}
       >
-        <div className="mb-2 flex justify-center">
+        {/* <div className="mb-2 flex justify-center">
           <span className="inline-block w-full max-w-[100px]">
             <Logo width="100%" />
           </span>
-        </div>
+        </div> */}
         <h2 className="text-center text-2xl font-bold leading-tight">
           Sign up to create account
         </h2>
@@ -57,6 +57,13 @@ function signup() {
               })}
             />
             <Input
+              label="Username: "
+              placeholder="Enter your username"
+              {...register("username", {
+                required: true,
+              })}
+            />
+            <Input
               label="Email: "
               placeholder="Enter your email"
               type="email"
@@ -77,6 +84,14 @@ function signup() {
                 required: true,
               })}
             />
+            <Input
+              label="Profile Pic: "
+              type="file"
+              accept="image/png,image/jpg,image/jpeg"
+              {...register("profilePic", {
+                required: true,
+              })}
+            />
             <Button type="submit" className="w-full">
               Create Account
             </Button>
@@ -87,4 +102,4 @@ function signup() {
   );
 }
 
-export default signup;
+export { Signup };

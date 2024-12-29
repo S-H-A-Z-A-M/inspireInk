@@ -9,6 +9,9 @@ import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.tsx";
 import Protected from "./components/Layout/AuthLayout.tsx";
 import Signup from "./pages/Signup.tsx";
+import EditPost from "./pages/EditPost.tsx";
+import AddPost from "./pages/AddPost.tsx";
+import Post from "./pages/Post.tsx";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +20,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/all-posts",
         element: <Home />,
       },
       {
@@ -36,13 +43,29 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/add-posts",
+        path: "/add-post",
         element: (
           <Protected authentication={true} >
-            <Signup />
+            <AddPost />
           </Protected>
         ),
       },
+      {
+        path:'/edit-post/:slug',
+        element:(
+          <Protected authentication={true}>
+            <EditPost/>
+          </Protected>
+        )
+      },
+      {
+        path:'/blog/:slug',
+        element:(
+          <Protected authentication={false}>
+            <Post/>
+          </Protected>
+        )
+      }
     ],
   },
 ]);
