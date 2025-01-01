@@ -3,9 +3,11 @@ import {
   loginUser,
   registerUser,
   logoutUser,
+  changeCurrentPassword,
+  getCurrentUser,
 } from "../controllers/user.controllers.js";
 import { refreshaccessToken } from "../controllers/user.controllers.js";
-// import { upload } from "../middlewares/multer.middleware.js";
+import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router = Router();
 
@@ -28,6 +30,5 @@ router.route("/current-user").get(verifyJWT, getCurrentUser);
 // router
 //   .route("/update-coverimage")
 //   .patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage);
-
 
 export default router;

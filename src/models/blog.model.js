@@ -7,6 +7,10 @@ const blogSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    slug: {
+      type: "string",
+      required: true,
+    },
     coverImage: {
       type: String,
       required: true,

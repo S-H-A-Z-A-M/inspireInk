@@ -4,7 +4,7 @@ import { User } from "../models/user.model.js";
 import { uploadCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
-import { DeleteCloudinaryAsset } from "../utils/deleteCloudinaryFiles.js";
+import { DeleteCloudinaryAsset } from "../utils/deleteCloudinary.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -81,7 +81,6 @@ const registerUser = asyncHandler(async (req, res) => {
   // Extracting data from the request body
   const { name, email, username, password, about } = req.body;
 
-  // Validation: Check if all required fields are provided
   if (
     [name, email, username, password].some((field) => {
       return field?.trim() === "";
@@ -102,6 +101,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   // Handle avatar upload (if provided)
   const avatarLocalPath = req.file?.path;
+
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar file is missing");
   }
@@ -131,6 +131,20 @@ const registerUser = asyncHandler(async (req, res) => {
     profilePicURL: avatar.url, // Uploaded avatar URL
   });
 
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user._id
+  );
+
+  // Save the Refresh Token in the database
+  user.RefreshToken = refreshToken;
+  await user.save();
+
+  // Set cookie options
+  const options = {
+    httpOnly: true, // Accessible only by the web server
+    secure: true,
+  };
+
   // Remove sensitive fields and retrieve created user
   const createdUser = await User.findById(user._id).select(
     "-password -RefreshToken"
@@ -139,35 +153,45 @@ const registerUser = asyncHandler(async (req, res) => {
   // Check if user creation was successful and send response
   if (createdUser) {
     return res
-      .status(201)
-      .json(new ApiResponse(201, createdUser, "User created successfully"));
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json(
+        new ApiResponse(
+          200,
+          {
+            user: createdUser,
+            accessToken,
+            refreshToken,
+          },
+          "User logged in successfully"
+        )
+      );
   } else {
     throw new ApiError(500, "User creation failed");
   }
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, username, password } = req.body;
+  const { email, password } = req.body;
 
   // Validate input: Ensure either email or username is provided
-  if (!(email || username)) {
-    throw new ApiError(400, "Username or Email is required");
+  if (!email) {
+    throw new ApiError(401, "Username or Email is required");
   }
 
   // Find user by username or email
-  const user = await User.findOne({
-    $or: [{ username: username?.toLowerCase() }, { email }],
-  });
+  const user = await User.findOne({ email });
 
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
   // Check if the password is correct
-  //   const isPasswordValid = await user.isPasswordCorrect(password); // Assuming you have a method `isPasswordCorrect` in your schema for password comparison
-  //   if (!isPasswordValid) {
-  //     throw new ApiError(401, "Invalid user credentials");
-  //   }
+  const isPasswordValid = await user.isPasswordCorrect(password); // Assuming you have a method `isPasswordCorrect` in your schema for password comparison
+  if (!isPasswordValid) {
+    throw new ApiError(401, "Invalid user credentials");
+  }
 
   // Generate Access Token and Refresh Token
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
@@ -186,8 +210,7 @@ const loginUser = asyncHandler(async (req, res) => {
   // Set cookie options
   const options = {
     httpOnly: true, // Accessible only by the web server
-    secure: process.env.NODE_ENV === "production", // Send over HTTPS in production
-    sameSite: "Strict", // Strict CSRF protection
+    secure: true,
   };
 
   // Send response
@@ -248,9 +271,17 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {
+  console.log(req.user);
   return res
     .status(200)
     .json(new ApiResponse(200, req.user, "user fetch successfully"));
 });
 
-export { registerUser, loginUser, logoutUser, refreshaccessToken };
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  refreshaccessToken,
+  changeCurrentPassword,
+  getCurrentUser,
+};
