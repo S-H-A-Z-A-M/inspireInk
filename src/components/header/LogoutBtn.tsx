@@ -1,13 +1,20 @@
 import { useDispatch } from "react-redux";
 import { logout } from "@/store/authSlice";
-import axios from "axios";
+
+import { userApi } from "@/axios";
 
 function LogoutBtn() {
   const dispatch = useDispatch();
   const handleLogout = () => {
-    axios.get("").then(() => {
-      dispatch(logout());
-    });
+    console.log(document.cookie);
+    userApi
+      .post("/logout")
+      .then(() => {
+        dispatch(logout());
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

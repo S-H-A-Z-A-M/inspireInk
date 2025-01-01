@@ -5,6 +5,8 @@ import Button from "./container/Button";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login as authLogin } from "@/store/authSlice";
+import { userApi } from "../axios.ts";
+import axios from "axios";
 
 function Login() {
   const navigate = useNavigate();
@@ -15,11 +17,17 @@ function Login() {
   const login = async (data) => {
     setError("");
     try {
-      // login method using axios
-      // if user exist dispatch login i.e authLogin
-      // Then redirect the user to "/"
-    } catch (error) {
-      setError(error.message);
+      const response = await userApi
+        .post("/login", data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => dispatch(authLogin(response.data.data)))
+        .then(() => navigate("/"));
+    } catch (err) {
+      console.log("login error", err);
+      setError(err.message);
     }
   };
   return (

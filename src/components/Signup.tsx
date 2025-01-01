@@ -5,22 +5,40 @@ import Button from "./container/Button";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/authSlice";
+import { userApi } from "@/axios";
 
 function Signup() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); // To handle button state
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
 
   const create = async (data) => {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("username", data.username);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("avatar", data.profilePic[0]);
     setError("");
+    setIsSubmitting(true); // Disable button during submission
+    console.log(formData);
+    console.log(formData);
     try {
-      // write axios method to submit user data
-      // if(userData) return current user;
-      // dispatch(login(userData));
-      // else return error
+      const response = await userApi.post("/register", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      dispatch(login(response.data.data));
+      navigate("/login");
     } catch (err) {
-      setError(err.message);
+      console.log(err);
+      setError(err.response?.data || "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
@@ -92,8 +110,8 @@ function Signup() {
                 required: true,
               })}
             />
-            <Button type="submit" className="w-full">
-              Create Account
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "Creating Account..." : "Create Account"}
             </Button>
           </div>
         </form>
