@@ -10,6 +10,7 @@ const blogSchema = new mongoose.Schema(
     slug: {
       type: "string",
       required: true,
+      unique: true,
     },
     coverImage: {
       type: String,
@@ -29,16 +30,18 @@ const blogSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-    commentedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment",
-    },
+    commentedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
   },
   {
     timestamps: true, // Automatically manages createdAt and updatedAt fields
   }
 );
 
-blogSchema.plugin(mongooseAggregatePaginate);
+// blogSchema.plugin(mongooseAggregatePaginate);
 
 export const Blog = mongoose.model("Blog", blogSchema);

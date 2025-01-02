@@ -111,37 +111,30 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!avatar.url) {
     throw new ApiError(500, "Error while uploading avatar");
   }
-  // if (req.files?.avatar?.[0]?.path) {
-  //   const avatar = await uploadCloudinary(req.files.avatar[0].path);
-  //   avatarUrl = avatar.url;
-  // }
 
-  // Create user object and save to database
   const user = await User.create({
-    // Unique userId generated based on timestamp
     name,
     email,
     username: username,
-    password, // You might want to hash the password before saving it
+    password,
     about: about || "",
-    isAdmin: false, // Default value for isAdmin
+    isAdmin: false,
     savedList: [],
     blogList: [],
-    RefreshToken: null, // Default value for refresh token
-    profilePicURL: avatar.url, // Uploaded avatar URL
+    RefreshToken: null,
+    profilePicURL: avatar.url,
   });
 
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     user._id
   );
 
-  // Save the Refresh Token in the database
   user.RefreshToken = refreshToken;
   await user.save();
 
   // Set cookie options
   const options = {
-    httpOnly: true, // Accessible only by the web server
+    httpOnly: true,
     secure: true,
   };
 

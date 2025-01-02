@@ -25,10 +25,11 @@ router.route("/current-user").get(verifyJWT, getCurrentUser);
 // router.route("/update-account").patch(verifyJWT, updateUserDetails);
 
 // router
-//   .route("/update-avatar")
+//   .route("/update-profile-pic")
 //   .patch(verifyJWT, upload.single("avatar"), updateUserAvatar);
-// router
-//   .route("/update-coverimage")
-//   .patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage);
+
+// router.route("/user-dashboard").get(verifyJWT, getUserDashboard);
+// router.route("/save-blog").get(verifyJWT, getUserDashboard);
+// router.route("/all-saved-blogs").get(verifyJWT, getUserDashboard);
 
 export default router;
