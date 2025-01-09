@@ -10,6 +10,8 @@ import {
   editBlog,
   deleteBlogById,
   getBlogById,
+  likeBlog,
+  countBlogSaves,
 } from "../controllers/blog.controller.js";
 
 const router = Router();
@@ -18,11 +20,13 @@ router
   .route("/create-blog")
   .post(verifyJWT, upload.single("coverImage"), createBlog);
 router.route("/delete-blog/:slug").delete(verifyJWT, deleteBlog);
-router.route("/delete-blog/:id").delete(verifyJWT, deleteBlogById);
-router.route("/blog/:slug").get(getBlogById); // if you are the owner then show delete and edit button
-router.route("/blog/:id").get(getBlogBySlug); // if you are the owner then show delete and edit button
+// router.route("/delete-blog/:id").delete(verifyJWT, deleteBlogById);
+// router.route("/blog/:id").get(getBlogById); // if you are the owner then show delete and edit button
+router.route("/blog/:slug").get(getBlogBySlug); // if you are the owner then show delete and edit button
 router.route("/all-blogs").get(getAllBlogs);
 router.route("/my-blogs/:userId").get(getAllBlogsByUser);
 router.route("/edit-blog/:slug").patch(verifyJWT, editBlog);
+router.route("/like-blog/:slug").patch(verifyJWT, likeBlog);
+router.route("/count-blog-saves/:postId").get(countBlogSaves);
 
 export default router;

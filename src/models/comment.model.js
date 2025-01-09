@@ -14,10 +14,20 @@ const commentSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    likedby: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    NumberofLikes: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
 
-commentSchema.plugin(mongooseAggregatePaginate);
+// commentSchema.plugin(mongooseAggregatePaginate);
 
 export const Comment = mongoose.model("Comment", commentSchema);

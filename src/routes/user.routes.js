@@ -5,6 +5,7 @@ import {
   logoutUser,
   changeCurrentPassword,
   getCurrentUser,
+  saveBlog,
 } from "../controllers/user.controllers.js";
 import { refreshaccessToken } from "../controllers/user.controllers.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -29,7 +30,7 @@ router.route("/current-user").get(verifyJWT, getCurrentUser);
 //   .patch(verifyJWT, upload.single("avatar"), updateUserAvatar);
 
 // router.route("/user-dashboard").get(verifyJWT, getUserDashboard);
-// router.route("/save-blog").get(verifyJWT, getUserDashboard);
+router.route("/save-blog/:postId").patch(verifyJWT, saveBlog);
 // router.route("/all-saved-blogs").get(verifyJWT, getUserDashboard);
 
 export default router;

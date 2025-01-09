@@ -77,7 +77,7 @@ const deleteBlog = asyncHandler(async (req, res) => {
     throw new ApiError(403, "You are not authorized to delete this blog");
   }
 
-  await blog.remove();
+  await Blog.deleteOne({ slug: slug });
 
   const deletedBlog = await Blog.findOne({ slug });
   if (deletedBlog) {
@@ -119,6 +119,7 @@ const deleteBlogById = asyncHandler(async (req, res) => {
 
 const getBlogBySlug = asyncHandler(async (req, res) => {
   const { slug } = req.params;
+  console.log(slug);
 
   if (!slug) {
     throw new ApiError(400, "slug is missing");
@@ -242,6 +243,50 @@ const editBlog = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Blog updated successfully", blog));
 });
 
+const likeBlog = asyncHandler(async (req, res) => {
+  const { slug } = req.params;
+  console.log(slug);
+  const user = req.user;
+
+  if (!slug) {
+    throw new ApiError(400, "slug is missing");
+  }
+
+  const blog = await Blog.findOne({ slug });
+  if (!blog) {
+    throw new ApiError(404, "Blog not found");
+  }
+
+  if (blog.likedBy.includes(user._id)) {
+    blog.likedBy = blog.likedBy.filter(
+      (id) => id.toString() !== user._id.toString()
+    );
+  } else {
+    blog.likedBy.push(user._id);
+  }
+
+  await blog.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Blog liked successfully", blog));
+});
+
+const countBlogSaves = asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+
+
+  if (!postId) {
+    throw new ApiError(400, "postId is missing");
+  }
+
+  const count = await User.countDocuments({ savedList: postId });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Blog save count fetched", count));
+});
+
 export {
   createBlog,
   deleteBlog,
@@ -251,4 +296,6 @@ export {
   editBlog,
   deleteBlogById,
   getBlogById,
+  likeBlog,
+  countBlogSaves,
 };

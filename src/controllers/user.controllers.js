@@ -264,10 +264,31 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {
-  console.log(req.user);
   return res
     .status(200)
     .json(new ApiResponse(200, req.user, "user fetch successfully"));
+});
+
+const saveBlog = asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+
+  const user = req.user;
+
+  if (user.savedList.includes(postId)) {
+    user.savedList = user.savedList.filter(
+      (id) => id.toString() !== postId.toString()
+    );
+  } else {
+    user.savedList.push(postId);
+  }
+
+  await user.save();
+
+  console.log(user.savedList);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Blog saved successfully"));
 });
 
 export {
@@ -277,4 +298,5 @@ export {
   refreshaccessToken,
   changeCurrentPassword,
   getCurrentUser,
+  saveBlog,
 };
