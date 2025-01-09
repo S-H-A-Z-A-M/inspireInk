@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { login as authLogin } from "@/store/authSlice";
 import { userApi } from "../axios.ts";
 import axios from "axios";
+import OAuth from "./container/OAuth.tsx";
 
 function Login() {
   const navigate = useNavigate();
@@ -81,6 +82,7 @@ function Login() {
             </Button>
           </div>
         </form>
+        <OAuth/>
       </div>
     </div>
   );

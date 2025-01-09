@@ -5,13 +5,13 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./pages/Home.tsx";
-import Login from "./pages/Login.tsx";
+import Home from "./pages/blogPages/Home.tsx";
+import Login from "./pages/userPages/Login.tsx";
 import Protected from "./components/Layout/AuthLayout.tsx";
-import Signup from "./pages/Signup.tsx";
-import EditPost from "./pages/EditPost.tsx";
-import AddPost from "./pages/AddPost.tsx";
-import Post from "./pages/Post.tsx";
+import Signup from "./pages/userPages/Signup.tsx";
+import EditPost from "./pages/blogPages/EditPost.tsx";
+import AddPost from "./pages/blogPages/AddPost.tsx";
+import Post from "./pages/blogPages/Post.tsx";
 
 const router = createBrowserRouter([
   {
@@ -23,13 +23,9 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/all-posts",
-        element: <Home />,
-      },
-      {
         path: "/login",
         element: (
-          <Protected authentication={false} >
+          <Protected authentication={false}>
             <Login />
           </Protected>
         ),
@@ -37,7 +33,7 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: (
-          <Protected authentication={false} >
+          <Protected authentication={false}>
             <Signup />
           </Protected>
         ),
@@ -45,27 +41,27 @@ const router = createBrowserRouter([
       {
         path: "/add-post",
         element: (
-          <Protected authentication={true} >
+          <Protected authentication={true}>
             <AddPost />
           </Protected>
         ),
       },
       {
-        path:'/edit-post/:slug',
-        element:(
+        path: "/edit-post/:slug",
+        element: (
           <Protected authentication={true}>
-            <EditPost/>
+            <EditPost />
           </Protected>
-        )
+        ),
       },
       {
-        path:'/blog/:slug',
-        element:(
+        path: "/blog/:slug",
+        element: (
           <Protected authentication={false}>
-            <Post/>
+            <Post />
           </Protected>
-        )
-      }
+        ),
+      },
     ],
   },
 ]);

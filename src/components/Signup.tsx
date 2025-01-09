@@ -2,10 +2,18 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "./container/Input";
 import Button from "./container/Button";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/authSlice";
 import { userApi } from "@/axios";
+
+interface SignupFormData {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  profilePic: FileList;
+}
 
 function Signup() {
   const navigate = useNavigate();
@@ -14,7 +22,7 @@ function Signup() {
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
 
-  const create = async (data) => {
+  const create: SubmitHandler<SignupFormData> = async (data) => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("username", data.username);
@@ -23,8 +31,6 @@ function Signup() {
     formData.append("avatar", data.profilePic[0]);
     setError("");
     setIsSubmitting(true); // Disable button during submission
-    console.log(formData);
-    console.log(formData);
     try {
       const response = await userApi.post("/register", formData, {
         headers: {
