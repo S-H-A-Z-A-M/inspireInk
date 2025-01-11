@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   loginUser,
   registerUser,
+  googleRegister,
   logoutUser,
   changeCurrentPassword,
   getCurrentUser,
@@ -9,18 +10,18 @@ import {
 } from "../controllers/user.controllers.js";
 import { refreshaccessToken } from "../controllers/user.controllers.js";
 import { upload } from "../middlewares/multer.middleware.js";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { verifyJWT } from  "../middlewares/auth.middleware.js";
 const router = Router();
 
 router.route("/register").post(upload.single("avatar"), registerUser);
-
+router.route("/google/auth").post(googleRegister);
 router.route("/login").post(loginUser);
+router.route("/refresh-token").post(refreshaccessToken);
 
 // Secured Routes
 
 router.route("/logout").post(verifyJWT, logoutUser);
 
-router.route("/refresh-token").post(refreshaccessToken);
 router.route("/change-password").post(verifyJWT, changeCurrentPassword);
 router.route("/current-user").get(verifyJWT, getCurrentUser);
 // router.route("/update-account").patch(verifyJWT, updateUserDetails);

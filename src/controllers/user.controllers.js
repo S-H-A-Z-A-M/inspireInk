@@ -10,9 +10,9 @@ const generateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
 
-    const accessToken = user.generateAccessToken();
+    const refreshToken = await user.generateRefreshToken();
+    const accessToken = await user.generateAccessToken();
 
-    const refreshToken = user.generateRefreshToken();
 
     user.RefreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
@@ -165,6 +165,100 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+const googleRegister = asyncHandler(async (req, res) => {
+  const { name, email, photoURL } = req.body;
+
+  const user = await User.findOne({ email });
+  console.log(user);
+  if (user) {
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+      user._id
+    );
+
+    user.RefreshToken = refreshToken;
+    await user.save();
+
+    const loggedInUser = await User.findById(user._id).select(
+      "-password -RefreshToken"
+    );
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json(
+        new ApiResponse(
+          200,
+          {
+            user: loggedInUser,
+            accessToken,
+            refreshToken,
+          },
+          "User logged in successfully"
+        )
+      );
+  } else {
+    const generatedPassword =
+      Math.random().toString(36).slice(-8) +
+      Math.random().toString(36).slice(-8);
+    const username = email.split("@")[0];
+    const newUser = await User.create({
+      email,
+      password: generatedPassword,
+      username,
+      name,
+      isAdmin: false,
+      savedList: [],
+      blogList: [],
+      refreshToken: null,
+      profilePicURL: photoURL,
+    });
+
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+      user._id
+    );
+
+    user.RefreshToken = refreshToken;
+    await user.save();
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    // Remove sensitive fields and retrieve created user
+    const createdUser = await User.findById(user._id).select(
+      "-password -RefreshToken"
+    );
+
+    // Check if user creation was successful and send response
+    if (createdUser) {
+      return res
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(
+          new ApiResponse(
+            200,
+            {
+              user: createdUser,
+              accessToken,
+              refreshToken,
+            },
+            "User logged in successfully"
+          )
+        );
+    } else {
+      throw new ApiError(500, "User creation failed");
+    }
+  }
+});
+
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -293,6 +387,7 @@ const saveBlog = asyncHandler(async (req, res) => {
 
 export {
   registerUser,
+  googleRegister,
   loginUser,
   logoutUser,
   refreshaccessToken,
