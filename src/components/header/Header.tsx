@@ -25,14 +25,13 @@ function Header() {
     },
   ];
 
-  console.log(authStatus);
   return (
-    <header className="py-3 shadow bg-gray-500">
+    <header className="py-3 shadow-lg bg-[#050302]">
       <Container>
         <nav className="flex justify-around">
           {/* put logo */}
           {/* put search box */}
-          <ul className="flex justify-around items-center gap-8">
+          <ul className="flex justify-around items-center gap-8 text-white">
             {navItems.map((item) =>
               item.active ? (
                 <li key={item.name}>

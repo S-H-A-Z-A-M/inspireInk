@@ -1,59 +1,9 @@
-// import { blogApi } from "@/axios";
-// import React, { useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
-
-// function SideBar({
-//   noOfComment,
-//   likesArray,
-//   userSavedArray,
-//   handleLike,
-//   handleSave,
-//   postId,
-// }) {
-//   const [noOfSaves, setNoOfSaves] = useState(0);
-//   const userData = useSelector((state) => state.auth.userData);
-//   useEffect(() => {
-//     const response = async () => {
-//       const data = await blogApi
-//         .get(`/count-blog-saves/${postId}`)
-//         .then((data) => setNoOfSaves(data.message))
-//         .then(() => console.log(noOfSaves));
-//     };
-//     response();
-//   }, [postId]);
-
-//   return  (
-//     <div>
-//       <div>
-//         <p>comments: {noOfComment}</p>
-//         {/* <p
-//           className={`${
-//             userData && likesArray.includes(userData._id) && "text-color-red"
-//           }`}
-//         >
-//           Likes: {likesArray ? likesArray.length : 0}
-//         </p> */}
-//         <p
-//           className={`${
-//             userData &&
-//             userData.user.savedList.includes(postId) &&
-//             "text-color-orange"
-//           }`}
-//         >
-//           Saved: {`${noOfSaves}`}
-//         </p>
-//         <button onClick={() => handleLike()}>like</button>
-//         <button onClick={() => handleSave()}>save</button>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default SideBar;
-
 import { blogApi } from "@/axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { FaRegComment } from "react-icons/fa";
+import { AiOutlineLike } from "react-icons/ai";
+import { IoBookmarkOutline } from "react-icons/io5";
 
 function SideBar({
   noOfComment,
@@ -63,10 +13,9 @@ function SideBar({
   handleSave,
   postId,
 }) {
-  const [noOfSaves, setNoOfSaves] = useState(0);
-  const userData = useSelector((state) => state.auth.userData)    ;
+  const [noOfSaves, setNoOfSaves] = useState<number>(0);
+  const userData = useSelector((state) => state.auth.userData);
 
-  console.log(userData)
   useEffect(() => {
     const fetchSavesCount = async () => {
       try {
@@ -85,29 +34,37 @@ function SideBar({
   }, [postId, userSavedArray]);
 
   // Log changes to noOfSaves for debugging purposes
-
+  console.log("the output", userData && userData.savedList.includes(postId));
   return (
-    <div>
-      <div>
-        <p>Comments: {noOfComment}</p>
-        <p
-          className={`${
-            userData && likesArray.includes(userData._id) && "text-color-red"
-          }`}
-        >
-          Likes: {likesArray.length}
+    <div className="relativex` flex flex-col items-end p-3 min-w-48">
+      <div className="fixed mt-10">
+        <p className="flex flex-col justify-center items-center mb-4 text-2xl font-thin">
+          <FaRegComment />
+          {noOfComment}
         </p>
         <p
-          className={`${
-            userData &&
-            userData.savedList.includes(postId) &&
-            "text-color-orange"
+          className={`flex flex-col justify-center items-center mb-4 text-2xl font-thin ${
+            userData && likesArray.includes(userData._id) ? "text-red-500" : ""
           }`}
         >
-          Saved: {`${noOfSaves}`}
+          <button onClick={() => handleLike()}>
+            <AiOutlineLike />
+          </button>
+
+          {likesArray.length}
         </p>
-        <button onClick={() => handleLike()}>Like</button>
-        <button onClick={handleSave}>Save</button>
+        <p
+          className={` flex flex-col justify-center items-center mb-4 text-2xl font-thin ${
+            userData && userData.savedList.includes(postId)
+              ? "text-orange-400"
+              : ""
+          }`}
+        >
+          <button onClick={handleSave}>
+            <IoBookmarkOutline />
+          </button>
+          {`${noOfSaves}`}
+        </p>
       </div>
     </div>
   );

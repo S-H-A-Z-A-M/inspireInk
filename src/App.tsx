@@ -20,9 +20,8 @@ function App() {
       }
     });
   }, []);
-  // console.log(import.meta.env.VITE_APP_NAME);
   return !isLoading ? (
-    <div className="min-h-screen flex flex-wrap content-between bg-slate-700">
+    <div className="min-h-screen flex flex-wrap content-between">
       <div className="w-full block">
         <Header />
         <main>

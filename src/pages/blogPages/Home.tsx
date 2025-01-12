@@ -15,11 +15,11 @@ function Home() {
     });
   }, []);
   return (
-    <div className="w-full py-8">
+    <div className="w-full py-8 bg-[#f8f4f1]">
       <Container>
-        <div className="flex flex-wrap">
+        <div className="flex flex-col shadow-sm gap-5">
           {posts.map((post) => (
-            <div key={post._id} className="p-2 w-1/4">
+            <div key={post._id} className="">
               <PostCard {...post} />
             </div>
           ))}

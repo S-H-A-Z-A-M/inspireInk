@@ -24,7 +24,10 @@ function Login() {
             "Content-Type": "application/json",
           },
         })
-        .then((response) => dispatch(authLogin(response.data.data)))
+
+        .then((response) => {
+          dispatch(authLogin(response.data.data.user));
+        })
         .then(() => navigate("/"));
     } catch (err) {
       console.log("login error", err);
@@ -82,7 +85,7 @@ function Login() {
             </Button>
           </div>
         </form>
-        <OAuth/>
+        <OAuth />
       </div>
     </div>
   );

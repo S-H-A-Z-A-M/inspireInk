@@ -6,9 +6,8 @@ import { set, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-function CommentSection({ postId, id,updateComment }) {
+function CommentSection({ postId, id, updateComment }) {
   const userData = useSelector((state) => state.auth.userData);
-  console.log(userData);
   const naviagte = useNavigate();
   const [comments, setComments] = useState([]);
   const [reaminingChars, setRemainingChars] = useState(200);
@@ -20,7 +19,8 @@ function CommentSection({ postId, id,updateComment }) {
       try {
         const response = await commentApi.get(`/get-comments/${postId}`);
         if (response) {
-          updateComment(response.data.message.length)
+          updateComment(response.data.message.length);
+          console.log(response.data.message);
           setComments(response.data.message);
         } else {
           console.error("Something went wrong");
@@ -55,6 +55,7 @@ function CommentSection({ postId, id,updateComment }) {
       }
     } catch (err) {
       console.error(err);
+      naviagte("/login");
     }
   };
 
@@ -152,7 +153,7 @@ function CommentSection({ postId, id,updateComment }) {
         </form>
         {comments.length === 0 ? (
           <div>
-            <p>No comments yet</p>  
+            <p>No comments yet</p>
           </div>
         ) : (
           <div>

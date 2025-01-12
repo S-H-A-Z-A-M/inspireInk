@@ -65,7 +65,7 @@ function Comment({ comment, onEdit, onDelete, onLike }) {
                 <div>{comment.content}</div>
                 <div className="flex gap-4">
                   <Button
-                    className=" bg-inherit"
+                    className=""
                     onClick={() => onLike(comment._id)}
                   >
                     Like
@@ -74,7 +74,7 @@ function Comment({ comment, onEdit, onDelete, onLike }) {
                 </div>
                 {userData && userData._id === comment.owner._id && (
                   <div className="flex gap-4">
-                    <Button className=" bg-inherit" onClick={handleEdit}>
+                    <Button className="" onClick={handleEdit}>
                       Edit
                     </Button>
                     <Button

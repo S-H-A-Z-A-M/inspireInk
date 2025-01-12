@@ -9,9 +9,6 @@ function Protected({ children, authentication = true }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("pathname", location.pathname);
-    console.log("authStatus:", authStatus);
-    console.log("authentication", authentication);
     if (!authentication) {
       const locate = location.pathname;
       navigate(locate);
