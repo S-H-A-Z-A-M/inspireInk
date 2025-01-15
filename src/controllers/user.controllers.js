@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import { uploadCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import { Blog } from "../models/blog.model.js";
 import { DeleteCloudinaryAsset } from "../utils/deleteCloudinary.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
@@ -12,7 +13,6 @@ const generateAccessAndRefreshToken = async (userId) => {
 
     const refreshToken = await user.generateRefreshToken();
     const accessToken = await user.generateAccessToken();
-
 
     user.RefreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
@@ -363,6 +363,24 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, req.user, "user fetch successfully"));
 });
 
+const getUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  console.log("The user id", userId);
+  if (!userId) {
+    throw new ApiError(400, "userId is missing");
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "User found successfully"));
+});
+
 const saveBlog = asyncHandler(async (req, res) => {
   const { postId } = req.params;
 
@@ -385,6 +403,42 @@ const saveBlog = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, user, "Blog saved successfully"));
 });
 
+const getAllBlogsByUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    throw new ApiError(400, "userId is missing");
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const blogs = await Blog.find({ owner: userId });
+
+  return res.status(200).json(new ApiResponse(200, "Blogs found", blogs));
+});
+
+const getAllSavedBlogs = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    throw new ApiError(400, "userId is missing");
+  }
+
+  const user = await User.findById(userId).populate("savedList").exec();
+
+  if (!user) {
+    throw new ApiError(400, "User is invalid");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Blogs found", user.savedList));
+});
+
 export {
   registerUser,
   googleRegister,
@@ -394,4 +448,7 @@ export {
   changeCurrentPassword,
   getCurrentUser,
   saveBlog,
+  getAllBlogsByUser,
+  getAllSavedBlogs,
+  getUser,
 };

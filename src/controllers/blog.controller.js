@@ -174,24 +174,6 @@ const getAllBlogs = asyncHandler(async (req, res) => {
   );
 });
 
-const getAllBlogsByUser = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
-
-  if (!userId) {
-    throw new ApiError(400, "userId is missing");
-  }
-
-  const user = await User.findById(userId);
-
-  if (!user) {
-    throw new ApiError(404, "User not found");
-  }
-
-  const blogs = await Blog.find({ owner: userId });
-
-  return res.status(200).json(new ApiResponse(200, "Blogs found", blogs));
-});
-
 const editBlog = asyncHandler(async (req, res) => {
   const { slug } = req.params;
   const { title, content } = req.body;
@@ -275,7 +257,6 @@ const likeBlog = asyncHandler(async (req, res) => {
 const countBlogSaves = asyncHandler(async (req, res) => {
   const { postId } = req.params;
 
-
   if (!postId) {
     throw new ApiError(400, "postId is missing");
   }
@@ -292,7 +273,6 @@ export {
   deleteBlog,
   getAllBlogs,
   getBlogBySlug,
-  getAllBlogsByUser,
   editBlog,
   deleteBlogById,
   getBlogById,

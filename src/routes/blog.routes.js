@@ -6,7 +6,6 @@ import {
   deleteBlog,
   getAllBlogs,
   getBlogBySlug,
-  getAllBlogsByUser,
   editBlog,
   deleteBlogById,
   getBlogById,
@@ -24,7 +23,6 @@ router.route("/delete-blog/:slug").delete(verifyJWT, deleteBlog);
 // router.route("/blog/:id").get(getBlogById); // if you are the owner then show delete and edit button
 router.route("/blog/:slug").get(getBlogBySlug); // if you are the owner then show delete and edit button
 router.route("/all-blogs").get(getAllBlogs);
-router.route("/my-blogs/:userId").get(getAllBlogsByUser);
 router.route("/edit-blog/:slug").patch(verifyJWT, editBlog);
 router.route("/like-blog/:slug").patch(verifyJWT, likeBlog);
 router.route("/count-blog-saves/:postId").get(countBlogSaves);
