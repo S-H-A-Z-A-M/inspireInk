@@ -4,12 +4,16 @@ import React, { useId, forwardRef, InputHTMLAttributes } from "react";
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string; // Optional label text
   className?: string; // Optional custom class name
+
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
+const Input = React.forwardRef<HTMLInputElement, InputProps>
+(function Input(
   { label, type = "text", className = "", ...props },
   ref
 ) {
+  
+  console.log(props);
   const id = useId();
   return (
     <div className="w-full">
