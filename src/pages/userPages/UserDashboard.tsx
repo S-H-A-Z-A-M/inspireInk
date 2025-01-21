@@ -1,8 +1,7 @@
-import { blogApi, userApi } from "@/axios";
-import AlertDialogSlide from "@/components/container/AlertDialogSlide";
+import {  userApi } from "@/axios";
 import PostCard from "@/components/container/PostCard";
 import UserCard from "@/components/container/UserCard";
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function UserDashboard() {

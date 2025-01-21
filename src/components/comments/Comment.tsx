@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import Button from "@/components/container/Button";
-import Input from "@/components/container/Input";
-import { blogApi } from "@/axios";
+import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { commentApi } from "@/axios";
+import { Separator } from "../ui/separator";
 
 function Comment({ comment, onEdit, onDelete, onLike }) {
   const { register, handleSubmit } = useForm();
@@ -33,19 +32,19 @@ function Comment({ comment, onEdit, onDelete, onLike }) {
   };
 
   return (
-    <div className="flex gap-4 items-center">
-      <div>
+    <div className="w-full flex">
+      <div className="mt-1">
         <img
           className="h-10 w-10 rounded-full"
           src={comment.owner.profilePicURL}
           alt={comment.owner.name}
         />
       </div>
-      <div>
+      <div className="flex-grow ml-4" >
         {comment && (
-          <div>
+          <div className="mb-4">
             <div className="flex justify-between">
-              <p>{comment.owner.username}</p>
+              <p className="font-bold" >{comment.owner.username}</p>
               <p>Date</p>
             </div>
             {editMode ? (
@@ -61,13 +60,10 @@ function Comment({ comment, onEdit, onDelete, onLike }) {
                 </div>
               </div>
             ) : (
-              <div>
+              <div className="ml-2">
                 <div>{comment.content}</div>
-                <div className="flex gap-4">
-                  <Button
-                    className=""
-                    onClick={() => onLike(comment._id)}
-                  >
+                <div className="flex gap-4 items-center mb-2">
+                  <Button className="p-4" variant={"outline"} onClick={() => onLike(comment._id)}>
                     Like
                   </Button>
                   <p>{comment.NumberofLikes}</p>
@@ -78,7 +74,7 @@ function Comment({ comment, onEdit, onDelete, onLike }) {
                       Edit
                     </Button>
                     <Button
-                      className=" bg-inherit"
+                      variant={"destructive"}
                       onClick={() => onDelete(comment._id)}
                     >
                       Delete
@@ -87,6 +83,7 @@ function Comment({ comment, onEdit, onDelete, onLike }) {
                 )}
               </div>
             )}
+            <Separator className="mt-4" />
           </div>
         )}
       </div>

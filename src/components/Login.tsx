@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "./container/Input";
-import Button from "./container/Button";
+import { Button } from "./ui/button.tsx";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login as authLogin } from "@/store/authSlice";
 import { userApi } from "../axios.ts";
-import axios from "axios";
 import OAuth from "./container/OAuth.tsx";
 
 function Login() {
@@ -80,7 +79,7 @@ function Login() {
                 required: true,
               })}
             />
-            <Button type="submit" className="w-full">
+            <Button variant={"outline"} type="submit" className="w-full">
               Sign in
             </Button>
           </div>

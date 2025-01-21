@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { set, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { Separator } from "@/components/ui/separator";
 
 function CommentSection({ postId, id, updateComment }) {
   const userData = useSelector((state) => state.auth.userData);
@@ -131,7 +132,7 @@ function CommentSection({ postId, id, updateComment }) {
         id={id}
         className="mt-2 w-[800px] border border-outline p-5 rounded-lg"
       >
-        <form onSubmit={handleSubmit(submit)}>
+        <form className="mb-4"  onSubmit={handleSubmit(submit)}>
           <textarea
             maxLength={200}
             rows={3}
@@ -151,12 +152,13 @@ function CommentSection({ postId, id, updateComment }) {
             </button>
           </div>
         </form>
+        <Separator className="mb-4" />
         {comments.length === 0 ? (
           <div>
             <p>No comments yet</p>
           </div>
         ) : (
-          <div>
+          <div className="w-full flex flex-col" >
             {comments.map((comment) => (
               <Comment
                 onEdit={handleEdit}
