@@ -18,7 +18,7 @@ function PostForm({ post }) {
     });
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
-  const [imagePreview, setImagePreview] = useState(post?.image || "");
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleImageChange = (value) => {
     const file = value[0]; // Get the selected file
@@ -89,7 +89,13 @@ function PostForm({ post }) {
         setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
       if(name === "image"){
-        setImagePreview(handleImageChange(value.image));
+        if(value.image[0]){
+
+          handleImageChange(value.image);
+        }
+        else{
+          setImagePreview(null);
+        }
       }
     });
     return () => subscription.unsubscribe();
@@ -132,17 +138,11 @@ function PostForm({ post }) {
           accept="image/png,image/jpg,image/jpeg"
           {...register("image", { required: !post })}
           />
-        {imagePreview && (
+        {(imagePreview || post) && (
           <div>
-            {<img src={imagePreview} style={{maxHeight:'400px',maxWidth:'400px'}}/* preview image function*/ alt="" />}
+            {<img src={(imagePreview || post.coverImage)} style={{maxHeight:'400px',maxWidth:'400px'}}/* preview image function*/ alt="" />}
           </div>
         )}
-        {post && (
-          <div className="w-full mb-4">
-            {<img src={post.coverImage} /* preview image function*/ alt="" />}
-          </div>
-        )}
-
         <Button
           type="submit"
           textColor="black"

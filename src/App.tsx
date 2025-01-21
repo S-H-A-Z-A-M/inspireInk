@@ -28,7 +28,9 @@ function App() {
       <div className="w-full block">
         <Header />
         <main>
-          <Outlet />
+          <div className="mt-32">
+              <Outlet />
+          </div>
         </main>
         <Footer />
       </div>
