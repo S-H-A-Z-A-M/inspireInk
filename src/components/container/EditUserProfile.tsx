@@ -5,9 +5,11 @@ import { Button } from "../ui/button";
 import { userApi } from "@/axios";
 import { login } from "@/store/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import React , {useState,useEffect} from "react";
 
 function EditUserProfile() {
   const userData = useSelector((state) => state.auth.userData);
+  const [imagePreview,setImagePreview] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -36,7 +38,7 @@ function EditUserProfile() {
     }
   };
 
-  const { handleSubmit, register } = useForm({
+  const { handleSubmit,watch, register } = useForm({
     defaultValues: {
       name: userData.name,
       email: userData.email,
@@ -44,6 +46,38 @@ function EditUserProfile() {
       bio: userData.about || "",
     },
   });
+
+  const handleImageChange = (value) => {
+    const file = value[0]; // Get the selected file
+    console.log(file);
+    
+    if (file) {
+      // Create a FileReader to read the image file
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        // Set the image preview URL when reading is finished
+        setImagePreview(reader.result);
+      };
+
+      // Read the image file as a data URL
+      reader.readAsDataURL(file);
+    }
+  };
+  useEffect(() => {
+    const { unsubscribe } = watch((value, {name}) => {
+      if(name ==="profilePic"){
+        if(value.profilePic[0]){
+          handleImageChange(value.profilePic);
+        }
+        else{
+          setImagePreview(null);
+        }
+      }
+    })
+    return () => unsubscribe()
+  }, [watch])
+
   return (
     <div className="flex items-center justify-center mt-36">
       <div className="max-w-[40rem]">
@@ -81,6 +115,12 @@ function EditUserProfile() {
             accept="image/png, image/jpg, image/jpeg"
             {...register("profilePic", {})}
           />
+         {imagePreview && (
+          <div>
+            {<img src={imagePreview} style={{maxHeight:'400px',maxWidth:'400px'}}/* preview image function*/ alt="" />}
+          </div>
+        )}
+
           <Input
             label="Bio"
             placeholder="A short bio..."

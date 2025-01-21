@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React ,{  useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "./container/Input";
 import { Button } from "./ui/button";
@@ -19,8 +19,28 @@ function Signup() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // To handle button state
+  const [imagePreview, setImagePreview] = useState(null);
   const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
+  const { register,watch, handleSubmit } = useForm();
+
+
+  const handleImageChange = (value) => {
+    const file = value[0]; // Get the selected file
+    console.log(file);
+    
+    if (file) {
+      // Create a FileReader to read the image file
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        // Set the image preview URL when reading is finished
+        setImagePreview(reader.result);
+      };
+
+      // Read the image file as a data URL
+      reader.readAsDataURL(file);
+    }
+  };
 
   const create: SubmitHandler<SignupFormData> = async (data) => {
     const formData = new FormData();
@@ -47,6 +67,22 @@ function Signup() {
       setIsSubmitting(false);
     }
   };
+
+
+  useEffect(() => {
+    const { unsubscribe } = watch((value,{name}) => {
+      if(name === "profilePic"){
+        if(value.profilePic[0]){
+          handleImageChange(value.profilePic);
+        }
+        else{
+          setImagePreview(null);
+        }
+      }
+    })
+    return () => unsubscribe()
+  }, [watch])
+
   return (
     <div className="flex items-center justify-center mt-4">
       <div
@@ -116,6 +152,11 @@ function Signup() {
                 required: true,
               })}
             />
+             {imagePreview && (
+                <div>
+                  {<img src={imagePreview} style={{maxHeight:'400px',maxWidth:'400px'}}/* preview image function*/ alt="" />}
+                </div>
+              )}
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Creating Account..." : "Create Account"}
             </Button>

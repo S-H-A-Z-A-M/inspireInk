@@ -18,8 +18,25 @@ function PostForm({ post }) {
     });
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
-  const [imagePreview, setImagePreview] = useState(post?.image || "");
+  const [imagePreview, setImagePreview] = useState(null);
 
+  const handleImageChange = (value) => {
+    const file = value[0]; // Get the selected file
+    console.log(file);
+    
+    if (file) {
+      // Create a FileReader to read the image file
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        // Set the image preview URL when reading is finished
+        setImagePreview(reader.result);
+      };
+
+      // Read the image file as a data URL
+      reader.readAsDataURL(file);
+    }
+  };
   const submit = async (data) => {
     try {
       let payload;
@@ -71,11 +88,22 @@ function PostForm({ post }) {
       if (name === "title") {
         setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
+      if(name === "image"){
+        if(value.image[0]){
+
+          handleImageChange(value.image);
+        }
+        else{
+          setImagePreview(null);
+        }
+      }
     });
     return () => subscription.unsubscribe();
   }, [watch, slugTransform, setValue]);
   // console.log(post);
   return (
+    <div className="flex items-center  min-h-screen justify-center">
+
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
       <div className="w-2/3 px-2 ">
         <Input
@@ -83,7 +111,7 @@ function PostForm({ post }) {
           placeholder="Title"
           className="mb-4"
           {...register("title", { required: true })}
-        />
+          />
         <Input
           label="Slug"
           placeholder="Slug"
@@ -94,13 +122,13 @@ function PostForm({ post }) {
               shouldValidate: true,
             });
           }}
-        />
+          />
         <RTE
           label="Content"
           name="content"
           control={control}
           defaultValue={getValues("content")}
-        />
+          />
       </div>
       <div>
         <Input
@@ -109,23 +137,23 @@ function PostForm({ post }) {
           className="mb-4"
           accept="image/png,image/jpg,image/jpeg"
           {...register("image", { required: !post })}
-        />
-        {post && (
-          <div className="w-full mb-4">
-            {<img src={post.coverImage} /* preview image function*/ alt="" />}
+          />
+        {(imagePreview || post) && (
+          <div>
+            {<img src={(imagePreview || post.coverImage)} style={{maxHeight:'400px',maxWidth:'400px'}}/* preview image function*/ alt="" />}
           </div>
         )}
-
         <Button
           type="submit"
           textColor="black"
-          bgColor={post ? "bg-green-500" : "undefined"}
+          bgColor={post ? "bg-green-500" : "bg-red-500"}
           className="w-full"
-        >
+          >
           {post ? "Update" : "Save"}
         </Button>
       </div>
     </form>
+  </div>
   );
 }
 
