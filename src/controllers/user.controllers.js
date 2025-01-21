@@ -207,7 +207,7 @@ const googleRegister = asyncHandler(async (req, res) => {
       Math.random().toString(36).slice(-8) +
       Math.random().toString(36).slice(-8);
     const username = email.split("@")[0];
-    const newUser = await User.create({
+    const user = await User.create({
       email,
       password: generatedPassword,
       username,
