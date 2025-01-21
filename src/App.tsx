@@ -12,13 +12,16 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const getCurrentUser = userApi.get("/current-user").then((userData) => {
-      if (userData) {
-        dispatch(login(userData.data.data));
-      } else {
-        dispatch(logout());
-      }
-    });
+    const getCurrentUser = async () => {
+      await userApi.get("/current-user").then((userData) => {
+        if (userData) {
+          dispatch(login(userData.data.data));
+        } else {
+          dispatch(logout());
+        }
+      });
+    };
+    getCurrentUser();
   }, []);
   return !isLoading ? (
     <div className="min-h-screen flex flex-wrap content-between">

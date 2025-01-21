@@ -12,6 +12,8 @@ import Signup from "./pages/userPages/Signup.tsx";
 import EditPost from "./pages/blogPages/EditPost.tsx";
 import AddPost from "./pages/blogPages/AddPost.tsx";
 import Post from "./pages/blogPages/Post.tsx";
+import UserDashboard from "./pages/userPages/UserDashboard.tsx";
+import EditUserPage from "./pages/userPages/EditUserPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +61,22 @@ const router = createBrowserRouter([
         element: (
           <Protected authentication={false}>
             <Post />
+          </Protected>
+        ),
+      },
+      {
+        path: "/users/:username",
+        element: (
+          <Protected authentication={false}>
+            <UserDashboard />
+          </Protected>
+        ),
+      },
+      {
+        path: "/edit-profile",
+        element: (
+          <Protected authentication={true}>
+            <EditUserPage />
           </Protected>
         ),
       },

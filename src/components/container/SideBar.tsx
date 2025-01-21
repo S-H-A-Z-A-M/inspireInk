@@ -23,7 +23,7 @@ function SideBar({
         if (response && response.data) {
           console.log(response.data.message);
           setNoOfSaves(response.data.message); // Set the count properly
-          console.log("API Response:", response.data.message); // Log the API response
+          // console.log("API Response:", response.data.message); // Log the API response
         }
       } catch (error) {
         console.error("Error fetching save count:", error);
@@ -34,7 +34,6 @@ function SideBar({
   }, [postId, userSavedArray]);
 
   // Log changes to noOfSaves for debugging purposes
-  console.log("the output", userData && userData.savedList.includes(postId));
   return (
     <div className="relativex` flex flex-col items-end p-3 min-w-48">
       <div className="fixed mt-10">

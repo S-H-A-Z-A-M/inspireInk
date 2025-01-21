@@ -21,7 +21,7 @@ const commentApi = axios.create({
 
 userApi.interceptors.response.use(
   (response) => {
-    console.log(response) 
+    // console.log(response) 
     return response},
   async (error) => {
     const originalRequest = error.config;

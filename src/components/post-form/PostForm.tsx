@@ -22,29 +22,28 @@ function PostForm({ post }) {
   const [imagePreview, setImagePreview] = useState(post?.image || "");
 
   const submit = async (data) => {
-    const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("slug", data.slug);
-    formData.append("content", data.content);
-    if (data.image && data.image[0]) {
-      formData.append("coverImage", data.image[0]);
-    }
-
     try {
+      let payload;
+
+      payload = new FormData();
+      payload.append("title", data.title);
+      payload.append("slug", data.slug);
+      payload.append("content", data.content);
+      payload.append("coverImage", data.image[0]);
+      let headers = { "Content-Type": "multipart/form-data" };
+      payload.forEach((value, key) => {
+        console.log(`${key}:`, value);
+      });
       let response;
       if (post) {
-        response = await blogApi.patch(`/edit-blog/${post.slug}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+        response = await blogApi.patch(`/edit-blog/${post.slug}`, payload, {
+          headers,
         });
       } else {
-        response = await blogApi.post("/create-blog", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        response = await blogApi.post("/create-blog", payload, { headers });
       }
+
+      // Handle response and navigation
       if (response) {
         const slug = response.data.message.slug;
         if (slug) {
@@ -53,8 +52,8 @@ function PostForm({ post }) {
           console.error("Slug is missing in the response data.");
         }
       }
-    } catch (error) {
-      console.error(err);
+    } catch (err) {
+      console.error("Error submitting the blog:", err);
     }
   };
 
@@ -76,7 +75,7 @@ function PostForm({ post }) {
     });
     return () => subscription.unsubscribe();
   }, [watch, slugTransform, setValue]);
-  console.log(post);
+  // console.log(post);
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
       <div className="w-2/3 px-2 ">
@@ -120,6 +119,7 @@ function PostForm({ post }) {
 
         <Button
           type="submit"
+          textColor="black"
           bgColor={post ? "bg-green-500" : "undefined"}
           className="w-full"
         >
