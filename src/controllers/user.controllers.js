@@ -4,7 +4,6 @@ import { User } from "../models/user.model.js";
 import { uploadCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
-import { Blog } from "../models/blog.model.js";
 import { DeleteCloudinaryAsset } from "../utils/deleteCloudinary.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
@@ -341,6 +340,73 @@ const logoutUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
 
+const editUserProfile = asyncHandler(async (req, res) => {
+  console.log(req.body);
+  const userId = req.user.id; // Assumes `req.user` contains authenticated user info
+  const { name, email, username, about } = req.body;
+  console.log(name)
+  console.log(email)
+  console.log(username)
+  console.log(about);
+  // Prepare an object for fields to update
+  const updates = {};
+
+  // Add only provided fields to the updates object
+  if (name) updates.name = name.trim();
+  if (email) updates.email = email.trim();
+  if (username) updates.username = username.trim();
+  if (about) updates.about = about.trim();
+
+  // Handle validation: Ensure at least one field is being updated
+  if (Object.keys(updates).length === 0 && !req.file) {
+    throw new ApiError(400, "No fields provided to update");
+  }
+
+  // Check if username or email is being updated and already exists
+  if (email || username) {
+    const existingUser = await User.findOne({
+      $or: [{ username: updates.username }, { email: updates.email }],
+      _id: { $ne: userId }, // Exclude the current user from the query
+    });
+
+    if (existingUser) {
+      throw new ApiError(
+        400,
+        "Username or email already taken by another user"
+      );
+    }
+  }
+
+  // Handle avatar upload if provided
+  if (req.file) {
+    const avatarLocalPath = req.file.path;
+
+    const uploadedAvatar = await uploadCloudinary(avatarLocalPath);
+    if (!uploadedAvatar.url) {
+      throw new ApiError(500, "Error while uploading avatar");
+    }
+
+    updates.profilePicURL = uploadedAvatar.url;
+  }
+
+  // Update the user in the database
+  const updatedUser = await User.findByIdAndUpdate(userId, updates, {
+    new: true, // Return the updated document
+    runValidators: true, // Ensure schema validation
+  }).select("-password -RefreshToken");
+
+  if (!updatedUser) {
+    throw new ApiError(404, "User not found");
+  }
+
+  // Send response
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, updatedUser, "User profile updated successfully")
+    );
+});
+
 const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
 
@@ -364,13 +430,13 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const getUser = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
-  console.log("The user id", userId);
-  if (!userId) {
-    throw new ApiError(400, "userId is missing");
+  const { username } = req.params;
+  console.log("The user id", username);
+  if (!username) {
+    throw new ApiError(400, "username is missing");
   }
 
-  const user = await User.findById(userId);
+  const user = await User.findOne({ username: username });
 
   if (!user) {
     throw new ApiError(404, "User not found");
@@ -404,31 +470,35 @@ const saveBlog = asyncHandler(async (req, res) => {
 });
 
 const getAllBlogsByUser = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+  const { username } = req.params;
 
-  if (!userId) {
+  if (!username) {
     throw new ApiError(400, "userId is missing");
   }
 
-  const user = await User.findById(userId);
+  const user = await User.findOne({ username: username })
+    .populate("blogList")
+    .exec();
 
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
-  const blogs = await Blog.find({ owner: userId });
-
-  return res.status(200).json(new ApiResponse(200, "Blogs found", blogs));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Blogs found", user.blogList));
 });
 
 const getAllSavedBlogs = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+  const { username } = req.params;
 
-  if (!userId) {
+  if (!username) {
     throw new ApiError(400, "userId is missing");
   }
 
-  const user = await User.findById(userId).populate("savedList").exec();
+  const user = await User.findOne({ username: username })
+    .populate("savedList")
+    .exec();
 
   if (!user) {
     throw new ApiError(400, "User is invalid");
@@ -444,6 +514,7 @@ export {
   googleRegister,
   loginUser,
   logoutUser,
+  editUserProfile,
   refreshaccessToken,
   changeCurrentPassword,
   getCurrentUser,

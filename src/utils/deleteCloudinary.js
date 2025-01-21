@@ -11,7 +11,8 @@ const DeleteCloudinaryAsset = async (publicURI) => {
   try {
     const publicId = publicURI.split("/")[-1].split(".")[0];
     const response = await cloudinary.uploader.destroy(publicId);
-    console.log(response);
+    console.log("Image deleted successfully");
+    return response;
   } catch (error) {
     return null;
   }
