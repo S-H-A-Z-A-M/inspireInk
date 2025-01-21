@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { Container } from "@/components";
 import PostCard from "@/components/container/PostCard";
 import { blogApi } from "@/axios";
-import Dropdown from "@/components/container/Dropdown";
-import { Link } from "react-router-dom";
 
 function Home() {
   const [posts, setPosts] = useState([]);

@@ -12,9 +12,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
 ) {
   const id = useId();
   return (
-    <div className="w-full">
+    <div className="w-full mb-2">
       {label && (
-        <label htmlFor={id} className="inline-block mb-1 pl-1">
+        <label htmlFor={id} className="inline-block pl-1 text-lg">
           {label}
         </label>
       )}

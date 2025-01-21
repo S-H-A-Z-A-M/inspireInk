@@ -1,10 +1,10 @@
 import Input from "./Input";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import Button from "./Button";
+import { Button } from "../ui/button";
 import { userApi } from "@/axios";
 import { login } from "@/store/authSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function EditUserProfile() {
   const userData = useSelector((state) => state.auth.userData);
@@ -45,49 +45,57 @@ function EditUserProfile() {
     },
   });
   return (
-    <div>
-      <form onSubmit={handleSubmit(updateUserProfile)}>
-        <h1>User</h1>
-        <Input
-          label="Name"
-          {...register("name", {
-            required: true,
-          })}
-        />
-        <Input
-          label="Email"
-          {...register("email", {
-            required: true,
-            validate: {
-              matchPatern: (value) =>
-                /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                "Email address must be a valid address",
-            },
-          })}
-        />
-        <Input
-          label="Username"
-          {...register("username", {
-            required: true,
-          })}
-        />
-        <Input
-          label="Profile Image"
-          type="file"
-          accept="image/png, image/jpg, image/jpeg"
-          {...register("profilePic", {})}
-        />
-        <Input
-          label="Bio"
-          placeholder="A short bio..."
-          {...register("bio", {
-            // required: true,
-          })}
-        />
-        <Button type="submit" className="w-full">
-          Update User Profile
-        </Button>
-      </form>
+    <div className="flex items-center justify-center mt-36">
+      <div className="max-w-[40rem]">
+        <h1 className="text-3xl font-bold mb-2">User</h1>
+        <form
+          className="ml-2 border p-4 bg-gray-50"
+          onSubmit={handleSubmit(updateUserProfile)}
+        >
+          <Input
+            label="Name"
+            {...register("name", {
+              required: true,
+            })}
+          />
+          <Input
+            label="Email"
+            {...register("email", {
+              required: true,
+              validate: {
+                matchPatern: (value) =>
+                  /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+                  "Email address must be a valid address",
+              },
+            })}
+          />
+          <Input
+            label="Username"
+            {...register("username", {
+              required: true,
+            })}
+          />
+          <Input
+            label="Profile Image"
+            type="file"
+            accept="image/png, image/jpg, image/jpeg"
+            {...register("profilePic", {})}
+          />
+          <Input
+            label="Bio"
+            placeholder="A short bio..."
+            {...register("bio", {
+              // required: true,
+            })}
+          />
+          <Button type="submit" className="w-full mt-4">
+            Update Profile
+          </Button>
+          <Button variant={"outline"} className="w-full mt-4">
+            <Link  to={`/users/${userData.username}`}>Cancel</Link>
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }

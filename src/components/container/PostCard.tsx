@@ -2,7 +2,7 @@ import { Divide } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import AlertDialogSlide from "./AlertDialogSlide";
-import { Button } from "@mui/material";
+import { Button } from "../ui/button";
 
 function PostCard({
   _id,
@@ -31,8 +31,12 @@ function PostCard({
         </div>
       </Link>
       {isuserPage && (
-        <div>
-          <Button sx={{marginRight:'10px',background:"#333"}} variant="contained" color="success" onClick={() => handleEdit(slug)}>Edit Post</Button>
+        <div className="flex justify-center items-center gap-4" >
+          <Button
+            onClick={() => handleEdit(slug)}
+          >
+            Edit Post
+          </Button>
           <AlertDialogSlide handleDelete={handleDelete} toDeleteSlug={slug} />
         </div>
       )}
