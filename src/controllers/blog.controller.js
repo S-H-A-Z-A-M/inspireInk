@@ -4,10 +4,12 @@ import { Blog } from "../models/blog.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { uploadCloudinary } from "../utils/cloudinary.js";
+import { DeleteCloudinaryAsset } from "../utils/deleteCloudinary.js";
 
 const createBlog = asyncHandler(async (req, res) => {
   const { title, content, slug } = req.body;
 
+  console.log(req.body);
   if (
     [title, content, slug].some((field) => {
       return field?.trim() === "";
@@ -175,14 +177,18 @@ const getAllBlogs = asyncHandler(async (req, res) => {
 });
 
 const editBlog = asyncHandler(async (req, res) => {
-  const { slug } = req.params;
-  const { title, content } = req.body;
+  const { oldSlug } = req.params;
+  const { slug, title, content } = req.body;
 
-  if (!slug) {
+  console.log(req.body);
+  console.log(oldSlug);
+  // console.log(slug, title, content);
+
+  if (!oldSlug) {
     throw new ApiError(400, "slug is missing");
   }
 
-  const blog = await Blog.findOne({ slug });
+  const blog = await Blog.findOne({ slug: oldSlug });
 
   if (!blog) {
     throw new ApiError(404, "Blog not found");
@@ -193,12 +199,7 @@ const editBlog = asyncHandler(async (req, res) => {
   }
 
   if (title) {
-    const newSlug = title
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-zA-Z\d\s]+/g, "-")
-      .replace(/\s/g, "-");
-    const existingBlogWithNewSlug = await Blog.findOne({ slug: newSlug });
+    const existingBlogWithNewSlug = await Blog.findOne({ slug: slug });
 
     if (
       existingBlogWithNewSlug &&
@@ -207,7 +208,7 @@ const editBlog = asyncHandler(async (req, res) => {
       throw new ApiError(400, "A blog with this title already exists");
     }
 
-    blog.slug = newSlug;
+    blog.slug = slug;
   }
 
   if (content) {
@@ -216,6 +217,21 @@ const editBlog = asyncHandler(async (req, res) => {
 
   if (title) {
     blog.title = title;
+  }
+
+  const coverImageLocalPath = req.file?.path;
+  if (coverImageLocalPath) {
+    const coverImage = await uploadCloudinary(coverImageLocalPath);
+    if (!coverImage) {
+      throw new ApiError(500, "Error while uploading cover image");
+    }
+    const tempUrl = blog.coverImage;
+    const response = DeleteCloudinaryAsset(tempUrl);
+    if (!response) {
+      throw new ApiError(500, "Error while deleting previous file");
+    }
+
+    blog.coverImage = coverImage.url;
   }
 
   await blog.save();

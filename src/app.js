@@ -21,10 +21,12 @@ app.use(cookieParser());
 import userRouter from "./routes/user.routes.js";
 import blogRouter from "./routes/blog.routes.js";
 import commentRouter from "./routes/comment.routes.js";
+// import imageRouter from "./routes/image.routes.js";
 
 // // routes Declaration
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/blogs", blogRouter);
 app.use("/api/v1/comments", commentRouter);
+// app.use("/api/v1/images", imageRouter);
 
 export { app };
