@@ -6,6 +6,7 @@ import { login, logout } from "./store/authSlice.ts";
 import { Footer } from "./components/index.ts";
 import { Outlet } from "react-router-dom";
 import { userApi } from "./axios.ts";
+import NavabarSpace from "./components/container/NavabarSpace.tsx";
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +29,9 @@ function App() {
       <div className="w-full block">
         <Header />
         <main>
-          <Outlet />
+          <NavabarSpace>
+            <Outlet />
+          </NavabarSpace>
         </main>
         <Footer />
       </div>
