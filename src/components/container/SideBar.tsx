@@ -23,7 +23,7 @@ function SideBar({
         if (response && response.data) {
           console.log(response.data.message);
           setNoOfSaves(response.data.message); // Set the count properly
-          console.log("API Response:", response.data.message); // Log the API response
+          // console.log("API Response:", response.data.message); // Log the API response
         }
       } catch (error) {
         console.error("Error fetching save count:", error);
@@ -34,39 +34,42 @@ function SideBar({
   }, [postId, userSavedArray]);
 
   // Log changes to noOfSaves for debugging purposes
-  console.log("the output", userData && userData.savedList.includes(postId));
   return (
-    <div className="relativex` flex flex-col items-end p-3 min-w-48">
-      <div className="fixed mt-10">
-        <p className="flex flex-col justify-center items-center mb-4 text-2xl font-thin">
-          <FaRegComment />
-          {noOfComment}
-        </p>
-        <p
-          className={`flex flex-col justify-center items-center mb-4 text-2xl font-thin ${
-            userData && likesArray.includes(userData._id) ? "text-red-500" : ""
-          }`}
-        >
-          <button onClick={() => handleLike()}>
-            <AiOutlineLike />
-          </button>
-
-          {likesArray.length}
-        </p>
-        <p
-          className={` flex flex-col justify-center items-center mb-4 text-2xl font-thin ${
-            userData && userData.savedList.includes(postId)
-              ? "text-orange-400"
-              : ""
-          }`}
-        >
-          <button onClick={handleSave}>
-            <IoBookmarkOutline />
-          </button>
-          {`${noOfSaves}`}
-        </p>
-      </div>
+    <div className="relative flex flex-col items-end p-3 min-w-48">
+  {/* Sidebar container */}
+  <div className="fixed top-20 right-5 space-y-6">
+    {/* Comments */}
+    <div className="flex flex-col items-center text-2xl font-thin">
+      <FaRegComment />
+      <p>{noOfComment}</p>
     </div>
+
+    {/* Likes */}
+    <div
+      className={`flex flex-col items-center text-2xl font-thin ${
+        userData && likesArray.includes(userData._id) ? "text-red-500" : ""
+      }`}
+    >
+      <button onClick={handleLike}>
+        <AiOutlineLike />
+      </button>
+      <p>{likesArray.length}</p>
+    </div>
+
+    {/* Save Post */}
+    <div
+      className={`flex flex-col items-center text-2xl font-thin ${
+        userData && userData.savedList.includes(postId) ? "text-orange-400" : ""
+      }`}
+    >
+      <button onClick={handleSave}>
+        <IoBookmarkOutline />
+      </button>
+      <p>{noOfSaves}</p>
+    </div>
+  </div>
+</div>
+
   );
 }
 

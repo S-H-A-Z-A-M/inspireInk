@@ -21,30 +21,46 @@ function PostForm({ post }) {
   const userData = useSelector((state) => state.auth.userData);
   const [imagePreview, setImagePreview] = useState(post?.image || "");
 
-  const submit = async (data) => {
-    const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("slug", data.slug);
-    formData.append("content", data.content);
-    if (data.image && data.image[0]) {
-      formData.append("coverImage", data.image[0]);
-    }
+  const handleImageChange = (value) => {
+    const file = value[0]; // Get the selected file
+    console.log(file);
+    
+    if (file) {
+      // Create a FileReader to read the image file
+      const reader = new FileReader();
 
+      reader.onloadend = () => {
+        // Set the image preview URL when reading is finished
+        setImagePreview(reader.result);
+      };
+
+      // Read the image file as a data URL
+      reader.readAsDataURL(file);
+    }
+  };
+  const submit = async (data) => {
     try {
+      let payload;
+
+      payload = new FormData();
+      payload.append("title", data.title);
+      payload.append("slug", data.slug);
+      payload.append("content", data.content);
+      payload.append("coverImage", data.image[0]);
+      let headers = { "Content-Type": "multipart/form-data" };
+      payload.forEach((value, key) => {
+        console.log(`${key}:`, value);
+      });
       let response;
       if (post) {
-        response = await blogApi.patch(`/edit-blog/${post.slug}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+        response = await blogApi.patch(`/edit-blog/${post.slug}`, payload, {
+          headers,
         });
       } else {
-        response = await blogApi.post("/create-blog", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        response = await blogApi.post("/create-blog", payload, { headers });
       }
+
+      // Handle response and navigation
       if (response) {
         const slug = response.data.message.slug;
         if (slug) {
@@ -53,8 +69,8 @@ function PostForm({ post }) {
           console.error("Slug is missing in the response data.");
         }
       }
-    } catch (error) {
-      console.error(err);
+    } catch (err) {
+      console.error("Error submitting the blog:", err);
     }
   };
 
@@ -73,11 +89,16 @@ function PostForm({ post }) {
       if (name === "title") {
         setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
+      if(name === "image"){
+        setImagePreview(handleImageChange(value.image));
+      }
     });
     return () => subscription.unsubscribe();
   }, [watch, slugTransform, setValue]);
-  console.log(post);
+  // console.log(post);
   return (
+    <div className="flex items-center  min-h-screen justify-center">
+
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
       <div className="w-2/3 px-2 ">
         <Input
@@ -85,7 +106,7 @@ function PostForm({ post }) {
           placeholder="Title"
           className="mb-4"
           {...register("title", { required: true })}
-        />
+          />
         <Input
           label="Slug"
           placeholder="Slug"
@@ -96,13 +117,13 @@ function PostForm({ post }) {
               shouldValidate: true,
             });
           }}
-        />
+          />
         <RTE
           label="Content"
           name="content"
           control={control}
           defaultValue={getValues("content")}
-        />
+          />
       </div>
       <div>
         <Input
@@ -111,7 +132,12 @@ function PostForm({ post }) {
           className="mb-4"
           accept="image/png,image/jpg,image/jpeg"
           {...register("image", { required: !post })}
-        />
+          />
+        {imagePreview && (
+          <div>
+            {<img src={imagePreview} style={{maxHeight:'400px',maxWidth:'400px'}}/* preview image function*/ alt="" />}
+          </div>
+        )}
         {post && (
           <div className="w-full mb-4">
             {<img src={post.coverImage} /* preview image function*/ alt="" />}
@@ -120,13 +146,15 @@ function PostForm({ post }) {
 
         <Button
           type="submit"
-          bgColor={post ? "bg-green-500" : "undefined"}
+          textColor="black"
+          bgColor={post ? "bg-green-500" : "bg-red-500"}
           className="w-full"
-        >
+          >
           {post ? "Update" : "Save"}
         </Button>
       </div>
     </form>
+  </div>
   );
 }
 

@@ -20,7 +20,7 @@ function CommentSection({ postId, id, updateComment }) {
         const response = await commentApi.get(`/get-comments/${postId}`);
         if (response) {
           updateComment(response.data.message.length);
-          console.log(response.data.message);
+          // console.log(response.data.message);
           setComments(response.data.message);
         } else {
           console.error("Something went wrong");
@@ -119,7 +119,7 @@ function CommentSection({ postId, id, updateComment }) {
             alt=""
           />
           {/* to add redirect to dashboard */}
-          <Link to="/">@{userData.name}</Link>
+          <Link to={`/users/${userData.username}`}>@{userData.name}</Link>
         </div>
       ) : (
         <div>

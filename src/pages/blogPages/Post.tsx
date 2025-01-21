@@ -98,24 +98,39 @@ function Post() {
             handleSave={handleSave}
             postId={post._id}
           />
-          <div>
-            <div className="rounded-sm p-2">
-              <div className="w-full flex mb-4 relative border rounded-xl">
-                <img className="rounded-xl" src={post.coverImage} alt="" />
-              </div>
-              <div className="">
-                <div>
-                  <h1 className="text-5xl font-bold mb-2">{post.title}</h1>
-                </div>
-                <div className="browser-css px-10">{parse(post.content)}</div>
-              </div>
-            </div>
-            <CommentSection
-              updateComment={(data) => setNoOfComments(data)}
-              id="commentSection"
-              postId={post._id}
-            />
-          </div>
+         
+<div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-2">
+  <div className="rounded-lg bg-white  p-6 max-w-4xl w-full">
+    {/* Image Section */}
+    <div className="w-full flex justify-center mb-6">
+      <img
+        className="rounded-xl max-w-full h-auto object-cover"
+        src={post.coverImage}
+        alt="Post Cover"
+        style={{maxHeight:"700px",maxwidth:"700px"}}
+      />
+    </div>
+
+    {/* Title and Content Section */}
+    <div>
+      {/* Title */}
+      <h1 className="text-4xl font-bold text-center mb-6">{post.title}</h1>
+
+      {/* Content */}
+      <div className="browser-css text-lg text-justify px-6">{parse(post.content)}</div>
+    </div>
+
+    {/* Comments Section */}
+    <div className="mt-8">
+      <CommentSection
+        updateComment={(data) => setNoOfComments(data)}
+        id="commentSection"
+        postId={post._id}
+      />
+    </div>
+  </div>
+</div>
+
         </div>
       </Container>
     </div>
