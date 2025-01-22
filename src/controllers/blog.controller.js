@@ -159,7 +159,9 @@ const getAllBlogs = asyncHandler(async (req, res) => {
   const blogs = await Blog.find()
     .sort({ updatedAt: -1 })
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .populate("owner")
+    .exec();
 
   const totalBlogs = await Blog.countDocuments();
 

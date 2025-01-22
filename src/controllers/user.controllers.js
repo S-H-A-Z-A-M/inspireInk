@@ -1,7 +1,10 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
-import { uploadCloudinary } from "../utils/cloudinary.js";
+import {
+  uploadCloudinary,
+  uploadGoogleCloudinary,
+} from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import { DeleteCloudinaryAsset } from "../utils/deleteCloudinary.js";
@@ -206,6 +209,11 @@ const googleRegister = asyncHandler(async (req, res) => {
       Math.random().toString(36).slice(-8) +
       Math.random().toString(36).slice(-8);
     const username = email.split("@")[0];
+    const avatar = await uploadGoogleCloudinary(photoURL);
+
+    if (!avatar.url) {
+      throw new ApiError(500, "Error while uploading avatar");
+    }
     const user = await User.create({
       email,
       password: generatedPassword,
@@ -215,7 +223,7 @@ const googleRegister = asyncHandler(async (req, res) => {
       savedList: [],
       blogList: [],
       refreshToken: null,
-      profilePicURL: photoURL,
+      profilePicURL: avatar.url,
     });
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
@@ -341,13 +349,8 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const editUserProfile = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const userId = req.user.id; // Assumes `req.user` contains authenticated user info
   const { name, email, username, about } = req.body;
-  console.log(name)
-  console.log(email)
-  console.log(username)
-  console.log(about);
   // Prepare an object for fields to update
   const updates = {};
 
