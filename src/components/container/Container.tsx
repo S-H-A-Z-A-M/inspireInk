@@ -2,11 +2,11 @@ import { ReactNode } from "react";
 
 interface ContainerProps {
   children: ReactNode;
-  className ?: string;
+  className?: string;
 }
 
-function Container({ children, className }: ContainerProps) {
-  return <div>{children}</div>;
+function Container({ children, className="" }: ContainerProps) {
+  return <div className={` ${className}`}>{children}</div>;
 }
 
 export default Container;

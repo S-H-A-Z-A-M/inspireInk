@@ -25,8 +25,8 @@ function App() {
     getCurrentUser();
   }, []);
   return !isLoading ? (
-    <div className="min-h-screen flex flex-wrap content-between">
-      <div className="w-full block">
+    <div className="min-h-screen flex">
+      <div className="w-full">
         <Header />
         <main>
           <NavabarSpace>

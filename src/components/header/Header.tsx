@@ -26,11 +26,15 @@ function Header() {
   ];
 
   return (
-    <header className="flex justify-center w-full my-4 fixed z-10" >
+    <header className="w-full fixed z-10">
       <Container>
-        <nav className="flex items-center justify-between min-w-[60rem] shadow-sm bg-slate-900 rounded-full px-6 py-2">
+        <nav className="flex items-center justify-between shadow-sm bg-slate-900 min-w-full px-6 py-2">
           <div className="">
-            <img className="h-[4.2rem] rounded-full invert"  src="/logo.png" alt="insipre ink logo" />
+            <img
+              className="h-[4.2rem] rounded-full invert"
+              src="/logo.png"
+              alt="insipre ink logo"
+            />
           </div>
           {/* put search box */}
           <ul className="flex justify-around items-center gap-8 text-white">

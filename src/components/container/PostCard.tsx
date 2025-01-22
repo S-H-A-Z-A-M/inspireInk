@@ -4,40 +4,56 @@ import AlertDialogSlide from "./AlertDialogSlide";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Edit } from "lucide-react";
+import parse from "html-react-parser";
 
 function PostCard({
   _id,
   slug,
   title,
+  likedBy,
+  content,
+  commentedBy,
   coverImage,
   isuserPage = false,
   handleEdit,
   handleDelete,
+  owner,
 }) {
   return (
-    <Card className="w-full max-w-4xl mx-auto overflow-hidden bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 mb-6">
+    <div className="w-full max-w-[70rem] mx-auto overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300 mb-2">
       <Link to={`/blog/${slug}`}>
+        <div className=" p-6 flex items-center gap-4">
+          <img
+            className=" rounded-full h-8 w-8"
+            src={owner.profilePicURL}
+            alt={`${owner.name}'s profile`}
+          />
+          <p className="text-gray-700">{owner.name}</p>
+        </div>
+
         <div className="relative group">
-          {/* Image container with hover effect */}
-          <div className="aspect-[23/10] overflow-hidden">
+          <div className="overflow-hidden flex flex-row-reverse justify-between px-8">
             <img
               src={coverImage}
               alt={title}
-              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+              className="h-[200px] w-[250px] object-cover transform group-hover:scale-105 transition-transform duration-300"
             />
+            <div className="p-6">
+              <h2 className="text-2xl font-semibold leading-tight">{title}</h2>
+              <p className="browser-css text-lg text-justify line-clamp-2 mt-4">
+                {parse(content)}
+              </p>
+            </div>
           </div>
-
-          {/* Title with gradient overlay */}
-          <CardContent className="p-6">
-            <h2 className="text-2xl font-semibold leading-tight hover:text-blue-600 transition-colors duration-200">
-              {title}
-            </h2>
-          </CardContent>
+        </div>
+        <div className="p-6 flex gap-4">
+          <h2>Likes: {likedBy.length}</h2>
+          <h2>Comments: {commentedBy.length}</h2>
         </div>
       </Link>
 
       {isuserPage && (
-        <CardFooter className="flex justify-end gap-4 p-4 bg-gray-50">
+        <div className="flex justify-end gap-4 p-4 bg-gray-50">
           <Button
             onClick={() => handleEdit(slug)}
             variant="outline"
@@ -47,9 +63,9 @@ function PostCard({
             Edit Post
           </Button>
           <AlertDialogSlide handleDelete={handleDelete} toDeleteSlug={slug} />
-        </CardFooter>
+        </div>
       )}
-    </Card>
+    </div>
   );
 }
 
