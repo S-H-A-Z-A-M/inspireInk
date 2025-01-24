@@ -1,4 +1,4 @@
-import React ,{  useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "./container/Input";
 import { Button } from "./ui/button";
@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/authSlice";
 import { userApi } from "@/axios";
+import OAuth from "./container/OAuth";
 
 interface SignupFormData {
   name: string;
@@ -18,16 +19,19 @@ interface SignupFormData {
 function Signup() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false); // To handle button state
+  // const [isSubmitting, setIsSubmitting] = useState(false); // To handle button state
   const [imagePreview, setImagePreview] = useState(null);
   const dispatch = useDispatch();
-  const { register,watch, handleSubmit } = useForm();
-
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
   const handleImageChange = (value) => {
     const file = value[0]; // Get the selected file
-    console.log(file);
-    
+
     if (file) {
       // Create a FileReader to read the image file
       const reader = new FileReader();
@@ -50,7 +54,6 @@ function Signup() {
     formData.append("password", data.password);
     formData.append("avatar", data.profilePic[0]);
     setError("");
-    setIsSubmitting(true); // Disable button during submission
     try {
       const response = await userApi.post("/register", formData, {
         headers: {
@@ -63,36 +66,27 @@ function Signup() {
     } catch (err) {
       console.log(err);
       setError(err.response?.data || "Something went wrong. Please try again.");
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
-
   useEffect(() => {
-    const { unsubscribe } = watch((value,{name}) => {
-      if(name === "profilePic"){
-        if(value.profilePic[0]){
+    const { unsubscribe } = watch((value, { name }) => {
+      if (name === "profilePic") {
+        if (value.profilePic[0]) {
           handleImageChange(value.profilePic);
-        }
-        else{
+        } else {
           setImagePreview(null);
         }
       }
-    })
-    return () => unsubscribe()
-  }, [watch])
+    });
+    return () => unsubscribe();
+  }, [watch]);
 
   return (
     <div className="flex items-center justify-center mt-4">
       <div
         className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}
       >
-        {/* <div className="mb-2 flex justify-center">
-          <span className="inline-block w-full max-w-[100px]">
-            <Logo width="100%" />
-          </span>
-        </div> */}
         <h2 className="text-center text-2xl font-bold leading-tight">
           Sign up to create account
         </h2>
@@ -107,28 +101,35 @@ function Signup() {
         </p>
         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
 
+        <OAuth />
         <form onSubmit={handleSubmit(create)}>
           <div className="space-y-5">
             <Input
               label="Full Name: "
               placeholder="Enter your full name"
               {...register("name", {
-                required: true,
+                required: "Name is required",
               })}
             />
+            {errors.name && (
+              <div className="text-red-500">{errors.name?.message}</div>
+            )}
             <Input
               label="Username: "
               placeholder="Enter your username"
               {...register("username", {
-                required: true,
+                required: "Username is required",
               })}
             />
+            {errors.username && (
+              <div className="text-red-500">{errors.username?.message}</div>
+            )}
             <Input
               label="Email: "
               placeholder="Enter your email"
               type="email"
               {...register("email", {
-                required: true,
+                required: "Email is required",
                 validate: {
                   matchPatern: (value) =>
                     /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
@@ -136,27 +137,57 @@ function Signup() {
                 },
               })}
             />
+            {errors.email && (
+              <div className="text-red-500">{errors.email?.message}</div>
+            )}
             <Input
               label="Password: "
               type="password"
               placeholder="Enter your password"
               {...register("password", {
-                required: true,
+                required: "Password is required",
+                minLength: {
+                  value: 8,
+                  message: "Password must be at least 8 characters long",
+                },
+                validate: {
+                  hasLowercase: (value) =>
+                    /[a-z]/.test(value) ||
+                    "Password must contain at least one lowercase letter",
+                  hasUppercase: (value) =>
+                    /[A-Z]/.test(value) ||
+                    "Password must contain at least one uppercase letter",
+                  hasNumber: (value) =>
+                    /\d/.test(value) ||
+                    "Password must contain at least one number",
+                },
               })}
             />
+            {errors.password && (
+              <div className="text-red-500">{errors.password?.message}</div>
+            )}
             <Input
               label="Profile Pic: "
               type="file"
               accept="image/png,image/jpg,image/jpeg"
               {...register("profilePic", {
-                required: true,
+                required: "Profile is required",
               })}
-            />
-             {imagePreview && (
-                <div>
-                  {<img src={imagePreview} style={{maxHeight:'400px',maxWidth:'400px'}}/* preview image function*/ alt="" />}
-                </div>
-              )}
+            />{" "}
+            {errors.profilePic && (
+              <div className="text-red-500">{errors.profilePic?.message}</div>
+            )}
+            {imagePreview && (
+              <div>
+                {
+                  <img
+                    src={imagePreview}
+                    style={{ maxHeight: "400px", maxWidth: "400px" }}
+                    /* preview image function*/ alt=""
+                  />
+                }
+              </div>
+            )}
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Creating Account..." : "Create Account"}
             </Button>

@@ -12,8 +12,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>
   { label, type = "text", className = "", ...props },
   ref
 ) {
-  
-  console.log(props);
   const id = useId();
   return (
     <div className="w-full mb-2">

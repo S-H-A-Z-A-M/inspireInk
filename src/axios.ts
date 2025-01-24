@@ -19,32 +19,32 @@ const commentApi = axios.create({
   withCredentials: true,
 });
 
-userApi.interceptors.response.use(
-  (response) => {
-    // console.log(response) 
-    return response},
-  async (error) => {
-    const originalRequest = error.config;
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
+// userApi.interceptors.response.use(
+//   (response) => {
+//     // console.log(response) 
+//     return response},
+//   async (error) => {
+//     const originalRequest = error.config;
+//     if (
+//       error.response &&
+//       error.response.status === 401 &&
+//       !originalRequest._retry
+//     ) {
+//       originalRequest._retry = true;
 
-      try {
-        const { data } = await userApi
-          .post("/refresh-token")
-          .then((newToken) => {
-            return userApi(originalRequest);
-          });
-      } catch (refreshError) {
-        console.log("Refresh Token Expired:", refreshError);
-        // window.location.href = "/login";
-        return Promise.reject(error);
-      }
-    }
-  }
-);
+//       try {
+//         const { data } = await userApi
+//           .post("/refresh-token")
+//           .then((newToken) => {
+//             return userApi(originalRequest);
+//           });
+//       } catch (refreshError) {
+//         console.log("Refresh Token Expired:", refreshError);
+//         // window.location.href = "/login";
+//         return Promise.reject(error);
+//       }
+//     }
+//   }
+// );
 
 export { userApi, blogApi, commentApi };
