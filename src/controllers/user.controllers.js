@@ -266,18 +266,17 @@ const googleRegister = asyncHandler(async (req, res) => {
   }
 });
 
-const loginUser = asyncHandler(async (req, res) => {
+const loginUser = asyncHandler(async (req, res,next) => {
   const { email, password } = req.body;
 
-  // Validate input: Ensure either email or username is provided
   if (!email) {
-    throw new ApiError(401, "Username or Email is required");
+    throw new ApiError(401, "Email is required");
   }
 
   // Find user by username or email
-  const user = await User.findOne({ email });
-
+  const user = await User.findOne({ email: email });
   if (!user) {
+    // next(new ApiError(404, "Resource not found"));
     throw new ApiError(404, "User not found");
   }
 

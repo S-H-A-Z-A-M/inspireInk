@@ -162,7 +162,6 @@ const getAllBlogs = asyncHandler(async (req, res) => {
     .limit(limit)
     .populate("owner")
     .exec();
-
   const totalBlogs = await Blog.countDocuments();
 
   return res.status(200).json(
