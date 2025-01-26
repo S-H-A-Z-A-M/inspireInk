@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import { login } from "@/store/authSlice";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
+import { FcGoogle } from "react-icons/fc";
+
 
 function OAuth() {
   const handleGoogleClick = async ({}) => {
@@ -37,13 +39,18 @@ function OAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
+    <>
     <Button
-      onClick={handleGoogleClick}
-      className=" w-full p-2 rounded font-bold text-slate-200 text-2xl mt-10"
-      type="button"
-    >
-      Google
-    </Button>
+    onClick={handleGoogleClick}
+    className="  w-full 
+    p-2 rounded font-bold  text-xl mt-5 mb-3"
+    type="button"
+>
+  {/* <img src="https://img.icons8.com/?size=100&id=17904&format=png&color=000000" alt="Google Icon" class="h-6 w-6 mr-2" /> */}
+  <FcGoogle size={30}/>
+  Google 
+</Button>
+  </>
   );
 }
 

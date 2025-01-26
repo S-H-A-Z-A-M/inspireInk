@@ -80,3 +80,9 @@
     @apply bg-background text-foreground;
   }
 }
+body{
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}

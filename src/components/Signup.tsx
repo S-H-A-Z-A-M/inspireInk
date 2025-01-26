@@ -83,7 +83,7 @@ function Signup() {
   }, [watch]);
 
   return (
-    <div className="flex items-center justify-center mt-4">
+    <div className="flex items-center justify-center mt-4 mb-5">
       <div
         className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}
       >
@@ -102,6 +102,10 @@ function Signup() {
         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
 
         <OAuth />
+
+        <p className=" mt-3 text-center text-base text-black/60">
+        Or with    
+        </p>
         <form onSubmit={handleSubmit(create)}>
           <div className="space-y-5">
             <Input
@@ -188,9 +192,10 @@ function Signup() {
                 }
               </div>
             )}
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button type="submit" variant={"outline"} className={!isSubmitting ? "w-full p-5" : "w-full bg-gray-400 p-5"}disabled={isSubmitting}>
               {isSubmitting ? "Creating Account..." : "Create Account"}
             </Button>
+            
           </div>
         </form>
       </div>
