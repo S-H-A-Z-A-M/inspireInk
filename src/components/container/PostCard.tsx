@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Edit } from "lucide-react";
 import parse from "html-react-parser";
+import moment from "moment";
 
 function PostCard({
   _id,
@@ -18,6 +19,7 @@ function PostCard({
   handleEdit,
   handleDelete,
   owner,
+  createdAt,
 }) {
   return (
     <div className="w-full max-w-[70rem] mx-auto overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300 mb-2">
@@ -47,6 +49,7 @@ function PostCard({
           </div>
         </div>
         <div className="p-6 flex gap-4">
+          <h2>Published at : {moment(createdAt).format("MMM Do YY")}</h2>
           <h2>Likes: {likedBy.length}</h2>
           <h2>Comments: {commentedBy.length}</h2>
         </div>

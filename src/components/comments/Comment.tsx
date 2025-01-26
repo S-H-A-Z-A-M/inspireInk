@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { commentApi } from "@/axios";
 import { Separator } from "../ui/separator";
+import moment from "moment";
 
 function Comment({ comment, onEdit, onDelete, onLike }) {
   const { register, handleSubmit } = useForm();
@@ -40,12 +41,12 @@ function Comment({ comment, onEdit, onDelete, onLike }) {
           alt={comment.owner.name}
         />
       </div>
-      <div className="flex-grow ml-4" >
+      <div className="flex-grow ml-4">
         {comment && (
           <div className="mb-4">
             <div className="flex justify-between">
-              <p className="font-bold" >{comment.owner.username}</p>
-              <p>Date</p>
+              <p className="font-bold">{comment.owner.username}</p>
+              <p>Date: {moment(comment.createdAt).format("MMM Do YY")}</p>
             </div>
             {editMode ? (
               <div>
@@ -53,17 +54,22 @@ function Comment({ comment, onEdit, onDelete, onLike }) {
                   rows={3}
                   value={editcomment}
                   onChange={(e) => setEditComment(e.target.value)}
+                  className="w-full"
                 ></textarea>
-                <div>
+                <div className="flex gap-4" >
                   <Button onClick={() => setEditMode(false)}>Cancel</Button>
-                  <Button onClick={handleSave}>Save</Button>
+                  <Button className="bg-blue-700" onClick={handleSave}>Save</Button>
                 </div>
               </div>
             ) : (
               <div className="ml-2">
                 <div>{comment.content}</div>
                 <div className="flex gap-4 items-center mb-2">
-                  <Button className="p-4" variant={"outline"} onClick={() => onLike(comment._id)}>
+                  <Button
+                    className="p-4"
+                    variant={"outline"}
+                    onClick={() => onLike(comment._id)}
+                  >
                     Like
                   </Button>
                   <p>{comment.NumberofLikes}</p>
