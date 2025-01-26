@@ -3,7 +3,7 @@ import { Container } from "@/components";
 import PostCard from "@/components/container/PostCard";
 import { blogApi } from "@/axios";
 import { SidebarTrigger, SidebarProvider } from "@/components/ui/sidebar";
-import AppSidebar from "@/components/container/AppSidebar";
+import TopBar from "@/components/container/TopBar";
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -14,8 +14,10 @@ function Home() {
       }
     });
   }, []);
+  console.log(posts);
   return (
-    <div className="w-full relative justify-center">
+    <div className="w-full flex flex-col items-center">
+      <TopBar setPosts={setPosts} posts={posts} />
       {/* <AppSidebar /> */}
       <Container>
         <div className="flex flex-col gap-5">
