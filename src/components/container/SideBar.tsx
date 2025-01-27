@@ -21,9 +21,7 @@ function SideBar({
       try {
         const response = await blogApi.get(`/count-blog-saves/${postId}`);
         if (response && response.data) {
-          console.log(response.data.message);
           setNoOfSaves(response.data.message); // Set the count properly
-          // console.log("API Response:", response.data.message); // Log the API response
         }
       } catch (error) {
         console.error("Error fetching save count:", error);

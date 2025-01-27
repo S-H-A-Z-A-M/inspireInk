@@ -5,11 +5,11 @@ import { Button } from "../ui/button";
 import { userApi } from "@/axios";
 import { login } from "@/store/authSlice";
 import { Link, useNavigate } from "react-router-dom";
-import React , {useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 function EditUserProfile() {
   const userData = useSelector((state) => state.auth.userData);
-  const [imagePreview,setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,7 +22,6 @@ function EditUserProfile() {
     if (data.image && data.image[0]) {
       formData.append("avatar", data.image[0]);
     }
-    console.log(formData);
 
     try {
       const response = await userApi.patch("/edit-profile", formData, {
@@ -30,7 +29,6 @@ function EditUserProfile() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response.data.data);
       dispatch(login(response.data.data));
       navigate(`/users/${response.data.data.username}`);
     } catch (err) {
@@ -38,7 +36,7 @@ function EditUserProfile() {
     }
   };
 
-  const { handleSubmit,watch, register } = useForm({
+  const { handleSubmit, watch, register } = useForm({
     defaultValues: {
       name: userData.name,
       email: userData.email,
@@ -49,8 +47,7 @@ function EditUserProfile() {
 
   const handleImageChange = (value) => {
     const file = value[0]; // Get the selected file
-    console.log(file);
-    
+
     if (file) {
       // Create a FileReader to read the image file
       const reader = new FileReader();
@@ -65,18 +62,17 @@ function EditUserProfile() {
     }
   };
   useEffect(() => {
-    const { unsubscribe } = watch((value, {name}) => {
-      if(name ==="profilePic"){
-        if(value.profilePic[0]){
+    const { unsubscribe } = watch((value, { name }) => {
+      if (name === "profilePic") {
+        if (value.profilePic[0]) {
           handleImageChange(value.profilePic);
-        }
-        else{
+        } else {
           setImagePreview(null);
         }
       }
-    })
-    return () => unsubscribe()
-  }, [watch])
+    });
+    return () => unsubscribe();
+  }, [watch]);
 
   return (
     <div className="flex items-center justify-center mt-36">
@@ -115,11 +111,17 @@ function EditUserProfile() {
             accept="image/png, image/jpg, image/jpeg"
             {...register("profilePic", {})}
           />
-         {imagePreview && (
-          <div>
-            {<img src={imagePreview} style={{maxHeight:'400px',maxWidth:'400px'}}/* preview image function*/ alt="" />}
-          </div>
-        )}
+          {imagePreview && (
+            <div>
+              {
+                <img
+                  src={imagePreview}
+                  style={{ maxHeight: "400px", maxWidth: "400px" }}
+                  /* preview image function*/ alt=""
+                />
+              }
+            </div>
+          )}
 
           <Input
             label="Bio"
@@ -132,7 +134,7 @@ function EditUserProfile() {
             Update Profile
           </Button>
           <Button variant={"outline"} className="w-full mt-4">
-            <Link  to={`/users/${userData.username}`}>Cancel</Link>
+            <Link to={`/users/${userData.username}`}>Cancel</Link>
           </Button>
         </form>
       </div>

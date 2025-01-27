@@ -46,7 +46,6 @@ function Post() {
       }
       const response = await blogApi.patch(`/like-blog/${slug.slug}`);
       if (response) {
-        console.log(response);
         setLikesArray(response.data.message.likedBy);
       }
     } catch (err) {
@@ -59,7 +58,6 @@ function Post() {
         navigate("/login");
       }
       const response = await userApi.patch(`/save-blog/${post._id}`);
-      // console.log(response);
       if (response) {
         setUserSavedArray(response.data.data.savedList);
         dispatch(login(response.data.data));

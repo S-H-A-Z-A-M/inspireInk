@@ -3,7 +3,8 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import { Provider } from "react-redux";
-import { store } from "./store/store.ts";
+import { store, persistor } from "./store/store.ts";
+import { PersistGate } from "redux-persist/integration/react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/blogPages/Home.tsx";
 import Login from "./pages/userPages/Login.tsx";
@@ -13,7 +14,7 @@ import EditPost from "./pages/blogPages/EditPost.tsx";
 import AddPost from "./pages/blogPages/AddPost.tsx";
 import Post from "./pages/blogPages/Post.tsx";
 import UserDashboard from "./pages/userPages/UserDashboard.tsx";
-import EditUserPage from "./pages/userPages/EditUserPage.tsx";  
+import EditUserPage from "./pages/userPages/EditUserPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -85,9 +86,11 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  </StrictMode>
+  <PersistGate persistor={persistor}>
+    <StrictMode>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    </StrictMode>
+  </PersistGate>
 );

@@ -2,8 +2,8 @@ import { Button } from "../ui/button";
 import { useSelector, UseSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-function UserCard({ user }) {
-  const userData = useSelector((state) => state.auth.userData);
+function UserCard({ user }: any) {
+  const userData = useSelector((state: any) => state.auth.userData);
   return (
     <div className="flex flex-col justify-center items-center mt-10 shadow bg-white hover:shadow-lg max-w-[60rem] mx-auto  p-4 border mb-4 rounded-3xl">
       <div className="mb-4">
@@ -16,11 +16,13 @@ function UserCard({ user }) {
         </p>
         <p>{user.createdAt}</p>
       </div>
-      <div>
-        <Link to={`/edit-profile`}>
-          <Button className="px-6 py-5 mt-4 ">Edit Profile</Button>
-        </Link>
-      </div>
+      {userData && userData._id === user._id && (
+        <div>
+          <Link to={`/edit-profile`}>
+            <Button className="px-6 py-5 mt-4 ">Edit Profile</Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

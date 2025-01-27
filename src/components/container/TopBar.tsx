@@ -28,7 +28,7 @@ function topBar({ setPosts, posts }: any) {
         </button>
         <Separator className="border border-pink-600" orientation="vertical" />
         <button onClick={sortByNewest}>
-          <li>latest</li>
+          <li>Latest</li>
         </button>
       </ul>
     </div>

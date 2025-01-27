@@ -13,18 +13,31 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const getCurrentUser = async () => {
-      await userApi.get("/current-user").then((userData) => {
-        if (userData) {
-          dispatch(login(userData.data.data));
-        } else {
-          dispatch(logout());
-        }
-      });
-    };
-    getCurrentUser();
+    try {
+      setIsLoading(false);
+      const getCurrentUser = async () => {
+        await userApi
+          .get("/current-user")
+          .then((userData) => {
+            if (userData) {
+              dispatch(login(userData.data.data));
+            } else {
+              dispatch(logout());
+            }
+          })
+          .catch((err) => {
+            console.log("app page error", err);
+          })
+          .finally(() => {
+            setIsLoading(true);
+          });
+      };
+      getCurrentUser();
+    } catch (error) {
+      console.log("app page error", error);
+    }
   }, []);
-  return !isLoading ? (
+  return isLoading ? (
     <div className="min-h-screen flex">
       <div className="w-full">
         <Header />

@@ -22,8 +22,7 @@ function PostForm({ post }) {
 
   const handleImageChange = (value) => {
     const file = value[0]; // Get the selected file
-    console.log(file);
-    
+
     if (file) {
       // Create a FileReader to read the image file
       const reader = new FileReader();
@@ -47,9 +46,6 @@ function PostForm({ post }) {
       payload.append("content", data.content);
       payload.append("coverImage", data.image[0]);
       let headers = { "Content-Type": "multipart/form-data" };
-      payload.forEach((value, key) => {
-        console.log(`${key}:`, value);
-      });
       let response;
       if (post) {
         response = await blogApi.patch(`/edit-blog/${post.slug}`, payload, {
@@ -88,12 +84,10 @@ function PostForm({ post }) {
       if (name === "title") {
         setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
-      if(name === "image"){
-        if(value.image[0]){
-
+      if (name === "image") {
+        if (value.image[0]) {
           handleImageChange(value.image);
-        }
-        else{
+        } else {
           setImagePreview(null);
         }
       }
@@ -103,57 +97,62 @@ function PostForm({ post }) {
   // console.log(post);
   return (
     <div className="flex items-center  min-h-screen justify-center">
-
-    <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
-      <div className="w-2/3 px-2 ">
-        <Input
-          label="Title"
-          placeholder="Title"
-          className="mb-4"
-          {...register("title", { required: true })}
+      <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
+        <div className="w-2/3 px-2 ">
+          <Input
+            label="Title"
+            placeholder="Title"
+            className="mb-4"
+            {...register("title", { required: true })}
           />
-        <Input
-          label="Slug"
-          placeholder="Slug"
-          className="mb-4"
-          {...register("slug", { required: true })}
-          onInput={(e) => {
-            setValue("slug", slugTransform(e.currentTarget.value), {
-              shouldValidate: true,
-            });
-          }}
+          <Input
+            label="Slug"
+            placeholder="Slug"
+            className="mb-4"
+            {...register("slug", { required: true })}
+            onInput={(e) => {
+              setValue("slug", slugTransform(e.currentTarget.value), {
+                shouldValidate: true,
+              });
+            }}
           />
-        <RTE
-          label="Content"
-          name="content"
-          control={control}
-          defaultValue={getValues("content")}
+          <RTE
+            label="Content"
+            name="content"
+            control={control}
+            defaultValue={getValues("content")}
           />
-      </div>
-      <div>
-        <Input
-          label="Cover Image"
-          type="file"
-          className="mb-4"
-          accept="image/png,image/jpg,image/jpeg"
-          {...register("image", { required: !post })}
+        </div>
+        <div>
+          <Input
+            label="Cover Image"
+            type="file"
+            className="mb-4"
+            accept="image/png,image/jpg,image/jpeg"
+            {...register("image", { required: !post })}
           />
-        {(imagePreview || post) && (
-          <div>
-            {<img src={(imagePreview || post.coverImage)} style={{maxHeight:'400px',maxWidth:'400px'}}/* preview image function*/ alt="" />}
-          </div>
-        )}
-        <Button
-          type="submit"
-          textColor="black"
-          bgColor={post ? "bg-green-500" : "bg-red-500"}
-          className="w-full"
+          {(imagePreview || post) && (
+            <div>
+              {
+                <img
+                  src={imagePreview || post.coverImage}
+                  style={{ maxHeight: "400px", maxWidth: "400px" }}
+                  /* preview image function*/ alt=""
+                />
+              }
+            </div>
+          )}
+          <Button
+            type="submit"
+            textColor="black"
+            bgColor={post ? "bg-green-500" : "bg-red-500"}
+            className="w-full"
           >
-          {post ? "Update" : "Save"}
-        </Button>
-      </div>
-    </form>
-  </div>
+            {post ? "Update" : "Save"}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
 

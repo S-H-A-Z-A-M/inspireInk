@@ -15,19 +15,12 @@ function LogoutBtn() {
         dispatch(logout());
         navigate("/");
       })
-
       .catch((err) => {
-        console.log(err);
+        console.log("the logout error", err);
       });
   };
 
-  return (
-    <button
-      onClick={handleLogout}
-    >
-      Logout
-    </button>
-  );
+  return <button onClick={handleLogout}>Logout</button>;
 }
 
 export default LogoutBtn;

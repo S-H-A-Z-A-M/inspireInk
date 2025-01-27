@@ -14,7 +14,6 @@ function Home() {
       }
     });
   }, []);
-  console.log(posts);
   return (
     <div className="w-full flex flex-col items-center">
       <TopBar setPosts={setPosts} posts={posts} />

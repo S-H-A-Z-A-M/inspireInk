@@ -1,14 +1,12 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import AlertDialogSlide from "./AlertDialogSlide";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Edit } from "lucide-react";
 import parse from "html-react-parser";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 function PostCard({
-  _id,
   slug,
   title,
   likedBy,
@@ -20,7 +18,8 @@ function PostCard({
   handleDelete,
   owner,
   createdAt,
-}) {
+}: any) {
+  const userData = useSelector((state: any) => state.auth.userData);
   return (
     <div className="w-full max-w-[70rem] mx-auto overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300 mb-2">
       <Link to={`/blog/${slug}`}>
@@ -30,7 +29,9 @@ function PostCard({
             src={owner.profilePicURL}
             alt={`${owner.name}'s profile`}
           />
-          <p className="text-gray-700">{owner.name}</p>
+          <Link to={`/users/${owner.username}`}>
+            <p className="text-gray-700 hover:underline">{owner.name}</p>
+          </Link>
         </div>
 
         <div className="relative group">
@@ -55,7 +56,7 @@ function PostCard({
         </div>
       </Link>
 
-      {isuserPage && (
+      {isuserPage && userData && userData._id === owner && (
         <div className="flex justify-end gap-4 p-4 bg-gray-50">
           <Button
             onClick={() => handleEdit(slug)}

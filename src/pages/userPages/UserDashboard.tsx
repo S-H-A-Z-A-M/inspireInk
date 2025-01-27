@@ -34,7 +34,6 @@ function UserDashboard() {
   }, [username]);
 
   const handleEdit = async (slugToEdit) => {
-    // console.log(slugToEdit);
     naviagte(`/edit-post/${slugToEdit}`);
   };
 
@@ -44,7 +43,6 @@ function UserDashboard() {
     // } catch (error) {
     //   console.log(error);
     // }
-    console.log(slugToDelete);
   };
 
   return user && userPosts ? (
