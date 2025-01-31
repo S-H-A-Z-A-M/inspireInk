@@ -101,13 +101,11 @@
 
 // export default Footer;
 
-import React from "react";
-
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-gray-900 text-white w-full sticky top-[100vh]">
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="border-b border-gray-700 py-2 text-center">
           <p>© {currentYear} Your Company. All rights reserved.</p>

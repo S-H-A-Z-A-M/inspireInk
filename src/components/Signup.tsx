@@ -103,9 +103,7 @@ function Signup() {
 
         <OAuth />
 
-        <p className=" mt-3 text-center text-base text-black/60">
-        Or with    
-        </p>
+        <p className=" mt-3 text-center text-base text-black/60">Or with</p>
         <form onSubmit={handleSubmit(create)}>
           <div className="space-y-5">
             <Input
@@ -182,7 +180,7 @@ function Signup() {
               <div className="text-red-500">{errors.profilePic?.message}</div>
             )}
             {imagePreview && (
-              <div>
+              <div className="mb-4 pl-4">
                 {
                   <img
                     src={imagePreview}
@@ -192,10 +190,16 @@ function Signup() {
                 }
               </div>
             )}
-            <Button type="submit" variant={"outline"} className={!isSubmitting ? "w-full p-5" : "w-full bg-gray-400 p-5"}disabled={isSubmitting}>
+            <Button
+              type="submit"
+              variant={"outline"}
+              className={
+                !isSubmitting ? "w-full p-5" : "w-full bg-gray-400 p-5"
+              }
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Creating Account..." : "Create Account"}
             </Button>
-            
           </div>
         </form>
       </div>

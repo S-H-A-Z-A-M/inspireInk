@@ -38,18 +38,18 @@ function App() {
     }
   }, []);
   return isLoading ? (
-    <div className="min-h-screen flex">
-      <div className="w-full">
-        <Header />
-        <main>
-          <NavabarSpace>
-            <Outlet />
-          </NavabarSpace>
-        </main>
-        <Footer />
-      </div>
+    // <div className=">
+    <div className="w-full flex flex-col justify-between min-h-screen">
+      <Header />
+      <main>
+        <NavabarSpace>
+          <Outlet />
+        </NavabarSpace>
+      </main>
+      <Footer />
     </div>
   ) : (
+    // </div>
     <div>The content is still loading</div>
   );
 }

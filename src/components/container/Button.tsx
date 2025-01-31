@@ -5,7 +5,7 @@ function Button({
   textColor = "text-white",
   className = "",
   ...props
-}) {
+}: any) {
   return (
     <button className={`${bgColor} ${textColor} ${className}`} {...props}>
       {children}

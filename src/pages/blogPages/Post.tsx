@@ -14,7 +14,7 @@ function Post() {
   const slug = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.auth.userData);
+  const userData = useSelector((state:any) => state.auth.userData);
   const [noOfComments, setNoOfComments] = useState(0);
   const [likesArray, setLikesArray] = useState([]);
   const [userSavedArray, setUserSavedArray] = useState(
@@ -121,7 +121,7 @@ function Post() {
     {/* Comments Section */}
     <div className="mt-8">
       <CommentSection
-        updateComment={(data) => setNoOfComments(data)}
+        updateComment={(data:any) => setNoOfComments(data)}
         id="commentSection"
         postId={post._id}
       />

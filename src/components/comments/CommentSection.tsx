@@ -7,8 +7,8 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 
-function CommentSection({ postId, id, updateComment }) {
-  const userData = useSelector((state) => state.auth.userData);
+function CommentSection({ postId, id, updateComment }: any) {
+  const userData = useSelector((state: any) => state.auth.userData);
   const naviagte = useNavigate();
   const [comments, setComments] = useState([]);
   const [reaminingChars, setRemainingChars] = useState(200);
@@ -43,7 +43,7 @@ function CommentSection({ postId, id, updateComment }) {
     return () => subscription.unsubscribe();
   }, [watch, setValue]);
 
-  const submit = async (data) => {
+  const submit = async (data: any) => {
     try {
       const response = await commentApi.post(`/create-comment/${postId}`, data);
       if (response) {
@@ -60,15 +60,15 @@ function CommentSection({ postId, id, updateComment }) {
     }
   };
 
-  const handleEdit = async (comment, editedContent) => {
+  const handleEdit = async (comment: any, editedContent: any) => {
     setComments(
-      comments.map((c) =>
+      comments.map((c:any) =>
         c._id === comment._id ? { ...c, content: editedContent } : c
       )
     );
   };
 
-  const handleDelete = async (commentId) => {
+  const handleDelete = async (commentId:any) => {
     try {
       const response = await commentApi.delete(`/delete-comment/${commentId}`);
       if (response) {
@@ -83,7 +83,7 @@ function CommentSection({ postId, id, updateComment }) {
     }
   };
 
-  const handleLike = async (commentId) => {
+  const handleLike = async (commentId:any) => {
     try {
       if (!userData) {
         naviagte("/login");
@@ -132,7 +132,7 @@ function CommentSection({ postId, id, updateComment }) {
         id={id}
         className="mt-2 w-[800px] border border-outline p-5 rounded-lg"
       >
-        <form className="mb-4"  onSubmit={handleSubmit(submit)}>
+        <form className="mb-4" onSubmit={handleSubmit(submit)}>
           <textarea
             maxLength={200}
             rows={3}
@@ -158,7 +158,7 @@ function CommentSection({ postId, id, updateComment }) {
             <p>No comments yet</p>
           </div>
         ) : (
-          <div className="w-full flex flex-col" >
+          <div className="w-full flex flex-col">
             {comments.map((comment) => (
               <Comment
                 onEdit={handleEdit}

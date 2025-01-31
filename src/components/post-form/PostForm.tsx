@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { blogApi } from "@/axios";
 
-function PostForm({ post }) {
+function PostForm({ post }: any) {
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
@@ -17,10 +17,10 @@ function PostForm({ post }) {
       },
     });
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.auth.userData);
+  const userData = useSelector((state: any) => state.auth.userData);
   const [imagePreview, setImagePreview] = useState(null);
 
-  const handleImageChange = (value) => {
+  const handleImageChange = (value: any) => {
     const file = value[0]; // Get the selected file
 
     if (file) {
@@ -36,7 +36,7 @@ function PostForm({ post }) {
       reader.readAsDataURL(file);
     }
   };
-  const submit = async (data) => {
+  const submit = async (data: any) => {
     try {
       let payload;
 
@@ -69,7 +69,7 @@ function PostForm({ post }) {
     }
   };
 
-  const slugTransform = useCallback((value) => {
+  const slugTransform = useCallback((value: any) => {
     if (value && typeof value === "string") {
       return value
         .trim()
@@ -80,7 +80,7 @@ function PostForm({ post }) {
   }, []);
 
   React.useEffect(() => {
-    const subscription = watch((value, { name }) => {
+    const subscription = watch((value, { name }: any) => {
       if (name === "title") {
         setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
@@ -132,11 +132,11 @@ function PostForm({ post }) {
             {...register("image", { required: !post })}
           />
           {(imagePreview || post) && (
-            <div>
+            <div className="mb-4 flex justify-center">
               {
                 <img
                   src={imagePreview || post.coverImage}
-                  style={{ maxHeight: "400px", maxWidth: "400px" }}
+                  style={{ maxHeight: "450px", maxWidth: "450px" }}
                   /* preview image function*/ alt=""
                 />
               }
@@ -144,8 +144,6 @@ function PostForm({ post }) {
           )}
           <Button
             type="submit"
-            textColor="black"
-            bgColor={post ? "bg-green-500" : "bg-red-500"}
             className="w-full"
           >
             {post ? "Update" : "Save"}

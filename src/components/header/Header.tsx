@@ -10,7 +10,7 @@ function Header() {
   const navigate = useNavigate();
 
   const navItems = [
-    { name: "Home", slug: "/", active: true },
+    // { name: "Home", slug: "/", active: true },
     {
       name: "Login",
       slug: "/login",
@@ -32,24 +32,26 @@ function Header() {
   return (
     <header className="w-full fixed z-10">
       <Container>
-        <nav className="flex items-center justify-between shadow-sm bg-slate-900 min-w-full px-6 py-2">
+        <nav className="flex items-center justify-between shadow-sm bg-slate-900 min-w-full px-3 lg:pl-10 lg:pr-20 pr-8 py-2">
           <div className="flex items-center gap-4">
-            <img
-              className="h-[4.2rem] rounded-full invert"
-              src="/logo.png"
-              alt="insipre ink logo"
-            />
-            <h2 className="text-white font-bold text-3xl ">INSPIREINK</h2>
+            <Link to={"/"}>
+              <img
+                className="h-[2.5rem]  lg:h-[4.2rem] rounded-full invert"
+                src="/logo.png"
+                alt="insipre ink logo"
+              />
+            </Link>
+            <h2 className="text-white font-bold lg:text-3xl ">INSPIREINK</h2>
           </div>
           {/* put search box */}
-          <ul className="flex justify-around items-center gap-8 text-white text-lg">
+          <ul className="flex justify-around items-center gap-6 lg:gap-8 text-white lg:text-lg">
             {navItems.map(
               (item) =>
                 item.active && (
                   <li key={item.name}>
                     <button
                       onClick={() => navigate(item.slug)}
-                      className="flex items-center gap-2"
+                      className="flex items-center text-base lg:text-xl lg:gap-2"
                     >
                       {item && item.icon && <LuSquarePen />}
                       {item.name}

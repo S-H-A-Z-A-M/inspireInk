@@ -21,7 +21,6 @@ const commentApi = axios.create({
 
 userApi.interceptors.response.use(
   (response) => {
-    // Simply return the response if there's no error
     return response;
   },
   async (error) => {
@@ -103,6 +102,5 @@ commentApi.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 export { userApi, blogApi, commentApi };

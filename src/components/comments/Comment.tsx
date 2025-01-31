@@ -7,10 +7,10 @@ import { commentApi } from "@/axios";
 import { Separator } from "../ui/separator";
 import moment from "moment";
 
-function Comment({ comment, onEdit, onDelete, onLike }) {
-  const { register, handleSubmit } = useForm();
+function Comment({ comment, onEdit, onDelete, onLike }: any) {
+  // const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.auth.userData);
+  const userData = useSelector((state: any) => state.auth.userData);
   const [editMode, setEditMode] = useState(false);
   const [editcomment, setEditComment] = useState(comment.content);
 
@@ -56,9 +56,11 @@ function Comment({ comment, onEdit, onDelete, onLike }) {
                   onChange={(e) => setEditComment(e.target.value)}
                   className="w-full"
                 ></textarea>
-                <div className="flex gap-4" >
+                <div className="flex gap-4">
                   <Button onClick={() => setEditMode(false)}>Cancel</Button>
-                  <Button className="bg-blue-700" onClick={handleSave}>Save</Button>
+                  <Button className="bg-blue-700" onClick={handleSave}>
+                    Save
+                  </Button>
                 </div>
               </div>
             ) : (

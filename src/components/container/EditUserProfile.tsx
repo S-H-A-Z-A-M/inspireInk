@@ -8,12 +8,12 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
 function EditUserProfile() {
-  const userData = useSelector((state) => state.auth.userData);
+  const userData = useSelector((state: any) => state.auth.userData);
   const [imagePreview, setImagePreview] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const updateUserProfile = async (data) => {
+  const updateUserProfile = async (data: any) => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("username", data.username);
@@ -45,7 +45,7 @@ function EditUserProfile() {
     },
   });
 
-  const handleImageChange = (value) => {
+  const handleImageChange = (value: any) => {
     const file = value[0]; // Get the selected file
 
     if (file) {
@@ -62,7 +62,7 @@ function EditUserProfile() {
     }
   };
   useEffect(() => {
-    const { unsubscribe } = watch((value, { name }) => {
+    const { unsubscribe } = watch((value: any, { name }: any) => {
       if (name === "profilePic") {
         if (value.profilePic[0]) {
           handleImageChange(value.profilePic);
@@ -112,7 +112,7 @@ function EditUserProfile() {
             {...register("profilePic", {})}
           />
           {imagePreview && (
-            <div>
+            <div className="mb-4 pl-4">
               {
                 <img
                   src={imagePreview}

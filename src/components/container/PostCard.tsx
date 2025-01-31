@@ -5,6 +5,7 @@ import { Edit } from "lucide-react";
 import parse from "html-react-parser";
 import moment from "moment";
 import { useSelector } from "react-redux";
+import { Separator } from "@radix-ui/react-separator";
 
 function PostCard({
   slug,
@@ -35,21 +36,24 @@ function PostCard({
         </div>
 
         <div className="relative group">
-          <div className="overflow-hidden flex flex-row-reverse justify-between px-8">
+          <div className="overflow-hidden text-left lg:flex flex-row-reverse justify-left lg:justify-between px-8">
             <img
               src={coverImage}
               alt={title}
-              className="h-[200px] w-[250px] object-cover transform group-hover:scale-105 transition-transform duration-300"
+              className=" h-[300px] w-full lg:h-[200px] lg:w-[250px] object-cover transform group-hover:scale-105 transition-transform duration-300"
             />
-            <div className="p-6">
-              <h2 className="text-2xl font-semibold leading-tight">{title}</h2>
-              <p className="browser-css text-lg text-justify line-clamp-2 mt-4">
+            <div className="lg:p-6 lg:mr-10">
+              <h2 className="text-2xl lg:text-3xl font-semibold leading-tight mt-2 lg:mt-0 ">
+                {title}
+              </h2>
+              <p className="browser-css sm:text-base pl-2 lg:text-lg line-clamp-2 mt-4">
                 {parse(content)}
               </p>
             </div>
           </div>
         </div>
-        <div className="p-6 flex gap-4">
+        <Separator className="border mx-9 border-gray-300 lg:border-none mt-2" />
+        <div className="pl-10 mt-2   text-left lg:p-6 lg:flex lg:gap-4">
           <h2>Published at : {moment(createdAt).format("MMM Do YY")}</h2>
           <h2>Likes: {likedBy.length}</h2>
           <h2>Comments: {commentedBy.length}</h2>

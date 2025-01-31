@@ -24,7 +24,7 @@ function UserDashboard() {
             setUserPost(userPostData.data.message);
           }
         }
-      } catch (error) {
+      } catch (error:any) {
         if (error.name !== "AbortError") {
           console.error("Error fetching user data:", error);
         }
@@ -33,11 +33,11 @@ function UserDashboard() {
     fetchUser();
   }, [username]);
 
-  const handleEdit = async (slugToEdit) => {
+  const handleEdit = async (slugToEdit:string) => {
     naviagte(`/edit-post/${slugToEdit}`);
   };
 
-  const handleDelete = async (slugToDelete) => {
+  const handleDelete = async (slugToDelete:string) => {
     // try {
     //   const response = await blogApi.delete(`/delete-blog/:slug`);
     // } catch (error) {
