@@ -33,8 +33,8 @@ function SideBar({
 
   // Log changes to noOfSaves for debugging purposes
   return (
-    <div className="relativex` flex flex-col items-end p-3 min-w-48">
-      <div className="fixed mt-10">
+    <div className="relative lg:flex lg:flex-col lg:items-end lg:p-3 lg:min-w-48">
+      <div className="sticky bottom-0 lg:mt-10 w-screen flex justify-around lg:flex-col lg:justify-normal lg:w-0">
         <p className="flex flex-col justify-center items-center mb-4 text-2xl font-thin">
           <FaRegComment />
           {noOfComment}

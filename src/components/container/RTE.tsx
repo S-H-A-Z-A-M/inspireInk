@@ -1,6 +1,7 @@
 import React from "react";
 import { Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
+import { Fullscreen } from "lucide-react";
 
 function RTE({ name, control, label, defaultValue = "" }) {
   return (
@@ -14,8 +15,13 @@ function RTE({ name, control, label, defaultValue = "" }) {
             apiKey={import.meta.env.VITE_TINY_MCE_API_KEY}
             initialValue={defaultValue}
             init={{
-              height: 500,
+              height: 500,  
               menubar: true,
+              mobile: {
+                menubar: true,
+                plugins: "autosave lists autolink help",
+                toolbar: "undo bold italic styles",
+              },
               plugins: [
                 "advlist",
                 "autolink",

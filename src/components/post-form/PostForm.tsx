@@ -17,7 +17,6 @@ function PostForm({ post }: any) {
       },
     });
   const navigate = useNavigate();
-  const userData = useSelector((state: any) => state.auth.userData);
   const [imagePreview, setImagePreview] = useState(null);
 
   const handleImageChange = (value: any) => {
@@ -96,9 +95,9 @@ function PostForm({ post }: any) {
   }, [watch, slugTransform, setValue]);
   // console.log(post);
   return (
-    <div className="flex items-center  min-h-screen justify-center">
+    <div className="flex items-center min-h-screen justify-center">
       <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
-        <div className="w-2/3 px-2 ">
+        <div className="w-full mx-2 lg:mx-96 ">
           <Input
             label="Title"
             placeholder="Title"
@@ -122,32 +121,29 @@ function PostForm({ post }: any) {
             control={control}
             defaultValue={getValues("content")}
           />
-        </div>
-        <div>
-          <Input
-            label="Cover Image"
-            type="file"
-            className="mb-4"
-            accept="image/png,image/jpg,image/jpeg"
-            {...register("image", { required: !post })}
-          />
-          {(imagePreview || post) && (
-            <div className="mb-4 flex justify-center">
-              {
-                <img
-                  src={imagePreview || post.coverImage}
-                  style={{ maxHeight: "450px", maxWidth: "450px" }}
-                  /* preview image function*/ alt=""
-                />
-              }
-            </div>
-          )}
-          <Button
-            type="submit"
-            className="w-full"
-          >
-            {post ? "Update" : "Save"}
-          </Button>
+          <div>
+            <Input
+              label="Cover Image"
+              type="file"
+              className="mb-4"
+              accept="image/png,image/jpg,image/jpeg"
+              {...register("image", { required: !post })}
+            />
+            {(imagePreview || post) && (
+              <div className="mb-4 flex justify-center">
+                {
+                  <img
+                    src={imagePreview || post.coverImage}
+                    className="w-full p-2"
+                    alt=""
+                  />
+                }
+              </div>
+            )}
+            <Button type="submit" className="w-full">
+              {post ? "Update" : "Save"}
+            </Button>
+          </div>
         </div>
       </form>
     </div>

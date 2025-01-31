@@ -130,7 +130,7 @@ function CommentSection({ postId, id, updateComment }: any) {
       )}
       <div
         id={id}
-        className="mt-2 w-[800px] border border-outline p-5 rounded-lg"
+        className="mt-2 lg:w-[800px] border border-outline p-5 rounded-lg"
       >
         <form className="mb-4" onSubmit={handleSubmit(submit)}>
           <textarea
