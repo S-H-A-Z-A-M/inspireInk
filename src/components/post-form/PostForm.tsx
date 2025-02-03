@@ -3,19 +3,26 @@ import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import Input from "../container/Input";
 import RTE from "../container/RTE";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { blogApi } from "@/axios";
 
 function PostForm({ post }: any) {
-  const { register, handleSubmit, watch, setValue, control, getValues } =
-    useForm({
-      defaultValues: {
-        title: post?.title || "",
-        slug: post?.slug || "",
-        content: post?.content || "",
-      },
-    });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    control,
+    getValues,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: {
+      title: post?.title || "",
+      slug: post?.slug || "",
+      content: post?.content || "",
+    },
+  });
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -63,7 +70,11 @@ function PostForm({ post }: any) {
           console.error("Slug is missing in the response data.");
         }
       }
-    } catch (err) {
+    } catch (err: any) {
+      const message = err.response.data.message;
+      if (message === "Blog already exists") {
+        setError("title", { message: "Title is already taken." });
+      }
       console.error("Error submitting the blog:", err);
     }
   };
@@ -101,13 +112,16 @@ function PostForm({ post }: any) {
           <Input
             label="Title"
             placeholder="Title"
-            className="mb-4"
-            {...register("title", { required: true })}
+            className="mb-1"
+            {...register("title", { required: "Title is required" })}
           />
+          {errors.title && (
+            <div className="text-red-500">{errors.title?.message}</div>
+          )}
           <Input
             label="Slug"
             placeholder="Slug"
-            className="mb-4"
+            className="mb-1"
             {...register("slug", { required: true })}
             onInput={(e) => {
               setValue("slug", slugTransform(e.currentTarget.value), {
@@ -115,35 +129,45 @@ function PostForm({ post }: any) {
               });
             }}
           />
+          {errors.slug && (
+            <div className="text-red-500">{errors.slug?.message}</div>
+          )}
           <RTE
             label="Content"
             name="content"
             control={control}
             defaultValue={getValues("content")}
           />
-          <div>
-            <Input
-              label="Cover Image"
-              type="file"
-              className="mb-4"
-              accept="image/png,image/jpg,image/jpeg"
-              {...register("image", { required: !post })}
-            />
-            {(imagePreview || post) && (
-              <div className="mb-4 flex justify-center">
-                {
-                  <img
-                    src={imagePreview || post.coverImage}
-                    className="w-full p-2"
-                    alt=""
-                  />
-                }
-              </div>
-            )}
-            <Button type="submit" className="w-full">
-              {post ? "Update" : "Save"}
-            </Button>
-          </div>
+          <Input
+            label="Cover Image"
+            type="file"
+            accept="image/png,image/jpg,image/jpeg"
+            {...register("image", {
+              required: { value: !post, message: "Image is requried" },
+            })}
+          />
+          {errors.image && (
+            <div className="text-red-500 mb-4">{errors.image?.message}</div>
+          )}
+          {(imagePreview || post) && (
+            <div className="mb-4 flex justify-center">
+              {
+                <img
+                  src={imagePreview || post.coverImage}
+                  className="w-full lg:w-1/2 p-2"
+                  alt=""
+                />
+              }
+            </div>
+          )}
+          <Button
+            disabled={isSubmitting}
+            variant={"default"}
+            type="submit"
+            className={!isSubmitting ? "w-full" : "w-full bg-gray-400"}
+          >
+            {post ? "Update" : "Save"}
+          </Button>
         </div>
       </form>
     </div>

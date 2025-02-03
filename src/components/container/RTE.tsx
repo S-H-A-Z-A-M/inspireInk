@@ -1,9 +1,7 @@
-import React from "react";
 import { Controller } from "react-hook-form";
 import { Editor } from "@tinymce/tinymce-react";
-import { Fullscreen } from "lucide-react";
 
-function RTE({ name, control, label, defaultValue = "" }) {
+function RTE({ name, control, label, defaultValue = "" }: any) {
   return (
     <div className="w-full">
       {label && <label className="inline-block mb-1 pl-1">{label}</label>}
@@ -15,7 +13,7 @@ function RTE({ name, control, label, defaultValue = "" }) {
             apiKey={import.meta.env.VITE_TINY_MCE_API_KEY}
             initialValue={defaultValue}
             init={{
-              height: 500,  
+              height: 500,
               menubar: true,
               mobile: {
                 menubar: true,

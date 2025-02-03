@@ -1,4 +1,6 @@
 import axios from "axios";
+import { store } from "./store/store";
+import { logout } from "./store/authSlice";
 
 const userApi = axios.create({
   baseURL: "http://localhost:8080/api/v1/users",
@@ -27,7 +29,8 @@ userApi.interceptors.response.use(
     const originalRequest = error.config;
     if (
       error.response &&
-      error.response.data.message === "jwt expired" &&
+      (error.response.data.message === "jwt expired" ||
+        error.response.data.message === "Unauthorized request") &&
       error.status === 401 &&
       !originalRequest._retry
     ) {
@@ -41,6 +44,7 @@ userApi.interceptors.response.use(
         return userApi(originalRequest);
       } catch (refreshError) {
         console.log("Refresh Token Expired:", refreshError);
+        store.dispatch(logout());
         // Redirect to login page or handle logout
         // window.location.href = "/login";
         return Promise.reject(refreshError);

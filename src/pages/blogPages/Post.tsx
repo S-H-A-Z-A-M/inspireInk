@@ -87,7 +87,7 @@ function Post() {
   return post ? (
     <div className="lg:py-8">
       <Container>
-        <div className="lg:flex justify-center" >
+        <div className="lg:flex justify-center">
           <SideBar
             noOfComment={noOfComments}
             likesArray={likesArray}

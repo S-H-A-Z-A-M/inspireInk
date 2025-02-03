@@ -1,5 +1,5 @@
 import { blogApi } from "@/axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { FaRegComment } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
@@ -12,9 +12,9 @@ function SideBar({
   handleLike,
   handleSave,
   postId,
-}) {
+}: any) {
   const [noOfSaves, setNoOfSaves] = useState<number>(0);
-  const userData = useSelector((state) => state.auth.userData);
+  const userData = useSelector((state: any) => state.auth.userData);
 
   useEffect(() => {
     const fetchSavesCount = async () => {
@@ -34,7 +34,7 @@ function SideBar({
   // Log changes to noOfSaves for debugging purposes
   return (
     <div className="relative lg:flex lg:flex-col lg:items-end lg:p-3 lg:min-w-48">
-      <div className="sticky bottom-0 lg:mt-10 w-screen flex justify-around lg:flex-col lg:justify-normal lg:w-0">
+      <div className="sticky md:fixed lg:mt-10 w-screen flex justify-around lg:flex-col lg:justify-normal lg:w-0">
         <p className="flex flex-col justify-center items-center mb-4 text-2xl font-thin">
           <FaRegComment />
           {noOfComment}

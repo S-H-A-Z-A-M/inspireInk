@@ -20,7 +20,7 @@ function LogoutBtn() {
       });
   };
 
-  return <button onClick={handleLogout}>Logout</button>;
+  return <li onClick={handleLogout}>Logout</li>;
 }
 
 export default LogoutBtn;

@@ -5,8 +5,8 @@ import { LuSquarePen } from "react-icons/lu";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 function Header() {
-  const authStatus = useSelector((state) => state.auth.status);
-  const userData = useSelector((state) => state.auth.userData);
+  const authStatus = useSelector((state:any) => state.auth.status);
+  const userData = useSelector((state:any) => state.auth.userData);
   const navigate = useNavigate();
 
   const navItems = [
@@ -91,7 +91,7 @@ function Header() {
                   <MenuItem>
                     <ul className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none">
                       {authStatus && (
-                        <li>
+                        <li className=" cursor-pointer" >
                           <LogoutBtn />
                         </li>
                       )}
