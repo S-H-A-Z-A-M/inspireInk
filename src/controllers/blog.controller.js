@@ -160,8 +160,11 @@ const getAllBlogs = asyncHandler(async (req, res) => {
     .sort({ updatedAt: -1 })
     .skip(skip)
     .limit(limit)
-    .populate("owner")
+    .populate([
+      { path: "owner", select: "username profilePicUrl name" }, // Adjust field names if needed
+    ])
     .exec();
+
   const totalBlogs = await Blog.countDocuments();
 
   return res.status(200).json(
@@ -180,10 +183,6 @@ const getAllBlogs = asyncHandler(async (req, res) => {
 const editBlog = asyncHandler(async (req, res) => {
   const { oldSlug } = req.params;
   const { slug, title, content } = req.body;
-
-  console.log(req.body);
-  console.log(oldSlug);
-  // console.log(slug, title, content);
 
   if (!oldSlug) {
     throw new ApiError(400, "slug is missing");

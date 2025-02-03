@@ -266,7 +266,7 @@ const googleRegister = asyncHandler(async (req, res) => {
   }
 });
 
-const loginUser = asyncHandler(async (req, res,next) => {
+const loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email) {

@@ -7,8 +7,6 @@ import {
   getAllBlogs,
   getBlogBySlug,
   editBlog,
-  deleteBlogById,
-  getBlogById,
   likeBlog,
   countBlogSaves,
 } from "../controllers/blog.controller.js";
