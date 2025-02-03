@@ -15,6 +15,7 @@ import AddPost from "./pages/blogPages/AddPost.tsx";
 import Post from "./pages/blogPages/Post.tsx";
 import UserDashboard from "./pages/userPages/UserDashboard.tsx";
 import EditUserPage from "./pages/userPages/EditUserPage.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,11 @@ const router = createBrowserRouter([
             <EditUserPage />
           </Protected>
         ),
+      },
+      // Catch-all route for 404 Not Found
+      {
+        path: "*",
+        element: <NotFound />,
       },
     ],
   },
