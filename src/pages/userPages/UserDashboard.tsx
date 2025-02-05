@@ -4,12 +4,28 @@ import UserCard from "@/components/container/UserCard";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+interface User {
+  _id: string;
+  name: string;
+  username: string;
+  email: string;
+  // Add other properties here
+}
+
+interface Post {
+  _id: string;
+  title: string;
+  content: string;
+  slug: string;
+  // Add other post-related properties here
+}
+
 function UserDashboard() {
   const { username } = useParams();
-  const [userPosts, setUserPost] = useState([]);
-  const [user, setUser] = useState(null);
+  const [userPosts, setUserPost] = useState<Post[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const isUserPage = useRef(true);
-  const naviagte = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -34,10 +50,11 @@ function UserDashboard() {
   }, [username]);
 
   const handleEdit = async (slugToEdit: string) => {
-    naviagte(`/edit-post/${slugToEdit}`);
+    navigate(`/edit-post/${slugToEdit}`);
   };
 
   const handleDelete = async (slugToDelete: string) => {
+    console.log(slugToDelete);
     // try {
     //   const response = await blogApi.delete(`/delete-blog/:slug`);
     // } catch (error) {
