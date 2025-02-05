@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import Input from "../container/Input";
@@ -21,26 +21,26 @@ function PostForm({ post }: any) {
       title: post?.title || "",
       slug: post?.slug || "",
       content: post?.content || "",
+      image: undefined,
     },
   });
   const navigate = useNavigate();
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const handleImageChange = (value: any) => {
-    const file = value[0]; // Get the selected file
-
-    if (file) {
-      // Create a FileReader to read the image file
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        // Set the image preview URL when reading is finished
-        setImagePreview(reader.result);
-      };
-
-      // Read the image file as a data URL
-      reader.readAsDataURL(file);
+  const handleImageChange = (value: FileList | null) => {
+    if (!value || value.length === 0) {
+      setImagePreview(null);
+      return;
     }
+
+    const file = value[0]; // ✅ Now safely handles empty/null values
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+    };
+
+    reader.readAsDataURL(file);
   };
   const submit = async (data: any) => {
     try {
@@ -89,13 +89,13 @@ function PostForm({ post }: any) {
     }
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const subscription = watch((value, { name }: any) => {
       if (name === "title") {
         setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
       if (name === "image") {
-        if (value.image[0]) {
+        if (value.image && value.image[0]) {
           handleImageChange(value.image);
         } else {
           setImagePreview(null);
@@ -115,7 +115,7 @@ function PostForm({ post }: any) {
             className="mb-1"
             {...register("title", { required: "Title is required" })}
           />
-          {errors.title && (
+          {typeof errors.title?.message === "string" && (
             <div className="text-red-500">{errors.title?.message}</div>
           )}
           <Input
@@ -129,7 +129,7 @@ function PostForm({ post }: any) {
               });
             }}
           />
-          {errors.slug && (
+          {typeof errors.slug?.message === "string" && (
             <div className="text-red-500">{errors.slug?.message}</div>
           )}
           <RTE
@@ -146,7 +146,7 @@ function PostForm({ post }: any) {
               required: { value: !post, message: "Image is requried" },
             })}
           />
-          {errors.image && (
+          {typeof errors.image?.message === "string" && (
             <div className="text-red-500 mb-4">{errors.image?.message}</div>
           )}
           {(imagePreview || post) && (

@@ -5,11 +5,11 @@ import { Button } from "../ui/button";
 import { userApi } from "@/axios";
 import { login } from "@/store/authSlice";
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 function EditUserProfile() {
   const userData = useSelector((state: any) => state.auth.userData);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -42,24 +42,24 @@ function EditUserProfile() {
       email: userData.email,
       username: userData.username,
       bio: userData.about || "",
+      profilePic:undefined,
     },
   });
 
-  const handleImageChange = (value: any) => {
-    const file = value[0]; // Get the selected file
-
-    if (file) {
-      // Create a FileReader to read the image file
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        // Set the image preview URL when reading is finished
-        setImagePreview(reader.result);
-      };
-
-      // Read the image file as a data URL
-      reader.readAsDataURL(file);
+  const handleImageChange = (value: FileList | null) => {
+    if (!value || value.length === 0) {
+      setImagePreview(null);
+      return;
     }
+
+    const file = value[0]; // ✅ Now safely handles empty/null values
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+    };
+
+    reader.readAsDataURL(file);
   };
   useEffect(() => {
     const { unsubscribe } = watch((value: any, { name }: any) => {
