@@ -348,7 +348,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const editUserProfile = asyncHandler(async (req, res) => {
-  const userId = req.user.id; // Assumes `req.user` contains authenticated user info
+  const userId = req.user._id; // Assumes `req.user` contains authenticated user info
   const { name, email, username, about } = req.body;
   // Prepare an object for fields to update
   const updates = {};
