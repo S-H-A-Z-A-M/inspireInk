@@ -1,4 +1,3 @@
-import React from "react";
 import EditUserProfile from "@/components/container/EditUserProfile";
 
 function EditUserPage() {

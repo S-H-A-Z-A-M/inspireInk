@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-// import { Button } from "@/components/ui/button";
 import { Container } from "@/components";
 import parse from "html-react-parser";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,8 +8,15 @@ import CommentSection from "@/components/comments/CommentSection";
 import SideBar from "@/components/container/SideBar";
 import { login } from "@/store/authSlice";
 
+type postSchema = {
+  _id: string;
+  coverImage: string;
+  content: string;
+  title: string;
+};
+
 function Post() {
-  const [post, setPost] = useState(null);
+  const [post, setPost] = useState<postSchema | null>(null);
   const slug = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,24 +26,6 @@ function Post() {
   const [userSavedArray, setUserSavedArray] = useState(
     userData ? userData.savedList : []
   );
-
-  const isAuthor = post && userData ? post.owner === userData._id : false;
-
-  const deletePost = () => {
-    useEffect(() => {
-      try {
-        if (slug) {
-          blogApi.delete(`/delete-blog/${slug}`).then((response) => {
-            if (response) {
-              navigate("/");
-            }
-          });
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    });
-  };
 
   const handleLike = async () => {
     try {
@@ -54,6 +42,9 @@ function Post() {
   };
   const handleSave = async () => {
     try {
+      if (!post) {
+        return;
+      }
       if (!userData) {
         navigate("/login");
       }

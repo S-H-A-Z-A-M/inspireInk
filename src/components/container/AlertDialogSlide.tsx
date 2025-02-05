@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AlertDialogSlide({ toDeleteSlug, handleDelete }) {
+export default function AlertDialogSlide({ toDeleteSlug, handleDelete }: any) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {

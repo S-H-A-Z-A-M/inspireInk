@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Container } from "@/components";
 import PostCard from "@/components/container/PostCard";
 import { blogApi } from "@/axios";
-import { SidebarTrigger, SidebarProvider } from "@/components/ui/sidebar";
 import TopBar from "@/components/container/TopBar";
 
 function Home() {

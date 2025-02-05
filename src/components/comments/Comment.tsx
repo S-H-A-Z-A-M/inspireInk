@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { commentApi } from "@/axios";
 import { Separator } from "../ui/separator";
@@ -9,7 +7,6 @@ import moment from "moment";
 
 function Comment({ comment, onEdit, onDelete, onLike }: any) {
   // const { register, handleSubmit } = useForm();
-  const navigate = useNavigate();
   const userData = useSelector((state: any) => state.auth.userData);
   const [editMode, setEditMode] = useState(false);
   const [editcomment, setEditComment] = useState(comment.content);

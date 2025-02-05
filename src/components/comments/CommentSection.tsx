@@ -1,16 +1,21 @@
 import { commentApi } from "@/axios";
 import Comment from "@/components/comments/Comment.tsx";
-import { get } from "node_modules/axios/index.d.cts";
-import React, { useEffect, useState } from "react";
-import { set, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 
+type Comment = {
+  _id: string;
+  content: string;
+  // Add other properties if needed
+};
+
 function CommentSection({ postId, id, updateComment }: any) {
   const userData = useSelector((state: any) => state.auth.userData);
   const naviagte = useNavigate();
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [reaminingChars, setRemainingChars] = useState(200);
   const [newComment, setNewComment] = useState(false);
   const { register, handleSubmit, reset, watch, setValue } = useForm();
@@ -62,13 +67,13 @@ function CommentSection({ postId, id, updateComment }: any) {
 
   const handleEdit = async (comment: any, editedContent: any) => {
     setComments(
-      comments.map((c:any) =>
+      comments.map((c: any) =>
         c._id === comment._id ? { ...c, content: editedContent } : c
       )
     );
   };
 
-  const handleDelete = async (commentId:any) => {
+  const handleDelete = async (commentId: any) => {
     try {
       const response = await commentApi.delete(`/delete-comment/${commentId}`);
       if (response) {
@@ -83,7 +88,7 @@ function CommentSection({ postId, id, updateComment }: any) {
     }
   };
 
-  const handleLike = async (commentId:any) => {
+  const handleLike = async (commentId: any) => {
     try {
       if (!userData) {
         naviagte("/login");

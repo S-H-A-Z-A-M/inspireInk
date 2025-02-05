@@ -1,6 +1,4 @@
 import { Separator } from "@radix-ui/react-separator";
-import React from "react";
-import { Link } from "react-router-dom";
 
 function topBar({ setPosts, posts }: any) {
   const sortBlogs = (criterion: string) => {
@@ -11,7 +9,8 @@ function topBar({ setPosts, posts }: any) {
   };
   const sortByNewest = () => {
     const sortedBlogs = [...posts].sort(
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
     setPosts(sortedBlogs);
   };

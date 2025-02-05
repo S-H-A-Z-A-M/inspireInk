@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "./container/Input";
 import { Button } from "./ui/button";
@@ -20,30 +20,29 @@ function Signup() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   // const [isSubmitting, setIsSubmitting] = useState(false); // To handle button state
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const dispatch = useDispatch();
   const {
     register,
     watch,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm<SignupFormData>();
 
-  const handleImageChange = (value) => {
-    const file = value[0]; // Get the selected file
-
-    if (file) {
-      // Create a FileReader to read the image file
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        // Set the image preview URL when reading is finished
-        setImagePreview(reader.result);
-      };
-
-      // Read the image file as a data URL
-      reader.readAsDataURL(file);
+  const handleImageChange = (value: FileList | null) => {
+    if (!value || value.length === 0) {
+      setImagePreview(null);
+      return;
     }
+
+    const file = value[0]; // ✅ Now safely handles empty/null values
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const create: SubmitHandler<SignupFormData> = async (data) => {
@@ -63,7 +62,7 @@ function Signup() {
 
       dispatch(login(response.data.data));
       navigate("/login");
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       setError(err.response?.data || "Something went wrong. Please try again.");
     }
@@ -72,7 +71,7 @@ function Signup() {
   useEffect(() => {
     const { unsubscribe } = watch((value, { name }) => {
       if (name === "profilePic") {
-        if (value.profilePic[0]) {
+        if (value.profilePic && value.profilePic[0]) {
           handleImageChange(value.profilePic);
         } else {
           setImagePreview(null);

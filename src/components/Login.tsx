@@ -17,7 +17,7 @@ function Login() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const login = async (data) => {
+  const login = async (data: any) => {
     try {
       const response = await userApi.post("/login", data, {
         headers: {
@@ -28,7 +28,7 @@ function Login() {
       console.log("response", response);
       dispatch(authLogin(response.data.data.user));
       navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       console.log("the error ::::::", error);
 
       if (error.response) {
@@ -60,7 +60,7 @@ function Login() {
         <h2 className="text-center text-2xl font-bold leading-tight">
           Sign in to your account
         </h2>
-        
+
         <form onSubmit={handleSubmit(login)} className="mt-5" noValidate>
           <div className="space-y-5">
             <Input
@@ -70,14 +70,14 @@ function Login() {
               {...register("email", {
                 required: { value: true, message: "Email is required" },
                 validate: {
-                  matchPatern: (value) =>
+                  matchPattern: (value) =>
                     /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
                     "Email address must be a valid address",
                 },
               })}
             />
-            {errors.email && (
-              <div className="text-red-500">{errors.email?.message}</div>
+            {typeof errors.email?.message === "string" && (
+              <div className="text-red-500">{errors.email.message}</div>
             )}
             <Input
               label="Password: "
@@ -87,7 +87,7 @@ function Login() {
                 required: { value: true, message: "password is required" },
               })}
             />
-            {errors.password && (
+            {typeof errors.password?.message === "string" && (
               <div className="text-red-500">{errors.password?.message}</div>
             )}
 
@@ -104,9 +104,7 @@ function Login() {
             </Button>
           </div>
         </form>
-        <p className=" mt-7 text-center text-base text-black/60">
-        Or with    
-        </p>
+        <p className=" mt-7 text-center text-base text-black/60">Or with</p>
         <OAuth />
         <p className="mt-4 text-center text-base text-black/60">
           Don&apos;t have any account?&nbsp;

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "./components/header/Header.tsx";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import { login, logout } from "./store/authSlice.ts";
 import { Footer } from "./components/index.ts";
 import { Outlet } from "react-router-dom";
