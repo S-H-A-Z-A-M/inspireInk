@@ -1,7 +1,7 @@
-import {  userApi } from "@/axios";
+import { userApi } from "@/axios";
 import PostCard from "@/components/container/PostCard";
 import UserCard from "@/components/container/UserCard";
-import  { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function UserDashboard() {
@@ -24,7 +24,7 @@ function UserDashboard() {
             setUserPost(userPostData.data.message);
           }
         }
-      } catch (error:any) {
+      } catch (error: any) {
         if (error.name !== "AbortError") {
           console.error("Error fetching user data:", error);
         }
@@ -33,11 +33,11 @@ function UserDashboard() {
     fetchUser();
   }, [username]);
 
-  const handleEdit = async (slugToEdit:string) => {
+  const handleEdit = async (slugToEdit: string) => {
     naviagte(`/edit-post/${slugToEdit}`);
   };
 
-  const handleDelete = async (slugToDelete:string) => {
+  const handleDelete = async (slugToDelete: string) => {
     // try {
     //   const response = await blogApi.delete(`/delete-blog/:slug`);
     // } catch (error) {
