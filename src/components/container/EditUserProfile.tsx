@@ -19,10 +19,9 @@ function EditUserProfile() {
     formData.append("username", data.username);
     formData.append("email", data.email);
     formData.append("about", data.bio);
-    if (data.image && data.image[0]) {
-      formData.append("avatar", data.image[0]);
+    if (data.profilePic && data.profilePic[0]) {
+      formData.append("avatar", data.profilePic[0]);
     }
-
     try {
       const response = await userApi.patch("/edit-profile", formData, {
         headers: {
@@ -42,7 +41,7 @@ function EditUserProfile() {
       email: userData.email,
       username: userData.username,
       bio: userData.about || "",
-      profilePic:undefined,
+      profilePic: undefined,
     },
   });
 
