@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       "/api": {
         // target: "https://inspireink-3lx5.onrender.com", // Change this to your backend URL
-        target: "http://localhost:8080",
+        target: "https://inspireink-3lx5.onrender.com",
         changeOrigin: true,
         secure: true,
         rewrite: (path) => path.replace(/^\/api/, "/api"),
