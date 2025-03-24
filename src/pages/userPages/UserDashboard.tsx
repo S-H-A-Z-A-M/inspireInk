@@ -1,4 +1,4 @@
-import { userApi } from "@/axios";
+import { blogApi, userApi } from "@/axios";
 import PostCard from "@/components/container/PostCard";
 import UserCard from "@/components/container/UserCard";
 import { useEffect, useRef, useState } from "react";
@@ -55,11 +55,16 @@ function UserDashboard() {
 
   const handleDelete = async (slugToDelete: string) => {
     console.log(slugToDelete);
-    // try {
-    //   const response = await blogApi.delete(`/delete-blog/:slug`);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const response = await blogApi.delete(`/delete-blog/${slugToDelete}`);
+      if (response) {
+        setUserPost(
+          userPosts.filter((userPost) => userPost.slug !== slugToDelete)
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return user && userPosts ? (

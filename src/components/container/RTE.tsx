@@ -36,17 +36,26 @@ function RTE({ name, control, label, defaultValue = "" }: any) {
                 "insertdatetime",
                 "media",
                 "table",
-                "code",
                 "help",
                 "wordcount",
+                "codesample"
               ],
               toolbar:
                 "undo redo | blocks | " +
                 "bold italic forecolor | alignleft aligncenter " +
                 "alignright alignjustify | bullist numlist outdent indent | " +
-                "removeformat | help",
+                "codesample | removeformat | help",
               content_style:
                 "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+              codesample_languages: [
+                // Define supported languages
+                { text: "JavaScript", value: "javascript" },
+                { text: "HTML/XML", value: "markup" },
+                { text: "CSS", value: "css" },
+                { text: "Python", value: "python" },
+                { text: "Java", value: "java" },
+                { text: "C++", value: "cpp" },
+              ],
             }}
             onEditorChange={onChange}
           />
