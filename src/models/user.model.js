@@ -26,9 +26,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    isAdmin: {
-      type: Boolean,
-      default: false,
+    role: {
+      type: String,
+      enum: ["user", "admin", "superadmin"], // Define three roles
+      default: "user", // Default to a regular user
     },
     savedList: [
       {
