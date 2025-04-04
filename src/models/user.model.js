@@ -75,7 +75,7 @@ userSchema.methods.generateAccessToken = function () {
       _id: this._id, //
       email: this.email,
       username: this.username,
-      isAdmin: this.isAdmin, // Added isAdmin for access control if necessary
+      role: this.role, // Added isAdmin for access control if necessary
     },
     process.env.ACCESS_TOKEN_SECRET,
     {

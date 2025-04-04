@@ -530,4 +530,5 @@ export {
   getAllBlogsByUser,
   getAllSavedBlogs,
   getUser,
+  generateAccessAndRefreshToken,
 };

@@ -7,7 +7,9 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    origin: [
+      process.env.CORS_ORIGIN,
+    ],
     credentials: true,
   })
 );
@@ -22,12 +24,14 @@ app.use(cookieParser());
 import userRouter from "./routes/user.routes.js";
 import blogRouter from "./routes/blog.routes.js";
 import commentRouter from "./routes/comment.routes.js";
+import adminRouter from "./routes/admin.routes.js";
 // import imageRouter from "./routes/image.routes.js";
 
 // // routes Declaration
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/blogs", blogRouter);
 app.use("/api/v1/comments", commentRouter);
+app.use("/admin", adminRouter);
 // app.use("/api/v1/images", imageRouter);
 
 app.use((err, req, res, next) => {

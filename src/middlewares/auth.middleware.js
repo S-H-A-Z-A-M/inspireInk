@@ -9,8 +9,6 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
     const token =
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
-    console.log(req.cookies)
-    console.log(token);
     if (!token) {
       throw new ApiError(401, "Unauthorized request");
     }
@@ -31,4 +29,17 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
   } catch (error) {
     throw new ApiError(401, error?.message || "Invalid access token");
   }
+});
+
+export const adminAuth = asyncHandler(async (req, _, next) => {
+  if (req.user.role !== "admin" && req.user.role !== "superadmin") {
+    throw new ApiError(403, "Admin Access Only");
+  }
+  next();
+});
+export const superAdminAuth = asyncHandler(async (req, _, next) => {
+  if (req.user.role !== "superadmin") {
+    throw new ApiError(403, "Super Admin Access Only");
+  }
+  next();
 });
