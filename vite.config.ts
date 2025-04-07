@@ -1,9 +1,17 @@
 import path from "path";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+import prism from "vite-plugin-prismjs";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    prism({
+      languages: ["javascript", "css", "html", "typescript", "python", "java"],
+      theme: "tomorrow",
+      css: true,
+    }),
+  ],
   // server: {
   //   proxy: {
   //     "/api": {

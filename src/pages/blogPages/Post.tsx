@@ -8,11 +8,21 @@ import CommentSection from "@/components/comments/CommentSection";
 import SideBar from "@/components/container/SideBar";
 import { login } from "@/store/authSlice";
 import Prism from "prismjs";
-import "prismjs/themes/prism-tomorrow.css";
-import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-python";
-import "prismjs/components/prism-java";
+import "prismjs/components/prism-bash";
+import "prismjs/components/prism-css";
+import "prismjs/components/prism-csv";
+import "prismjs/components/prism-docker";
+import "prismjs/components/prism-git";
+import "prismjs/components/prism-json";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-markdown";
 import "prismjs/components/prism-markup";
+import "prismjs/components/prism-mongodb";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-regex";
+import "prismjs/components/prism-sql";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-yaml";
 
 type postSchema = {
   _id: string;
@@ -73,7 +83,6 @@ function Post() {
           setPost(postData);
           setLikesArray(postData.likedBy);
           setNoOfComments(postData.commentedBy.length);
-          Prism.highlightAll();
         } else {
           navigate("/");
         }
@@ -82,6 +91,11 @@ function Post() {
       navigate("/");
     }
   }, [slug, navigate]);
+
+  useEffect(() => {
+    if (!post) return;
+    Prism.highlightAll();
+  }, [post]);
   return post ? (
     <div className="lg:py-8">
       <Container>
