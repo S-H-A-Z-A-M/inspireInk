@@ -8,7 +8,7 @@ import CommentSection from "@/components/comments/CommentSection";
 import SideBar from "@/components/container/SideBar";
 import { login } from "@/store/authSlice";
 import Prism from "prismjs";
-import "prismjs/themes/prism.css";
+import "prismjs/themes/prism-tomorrow.css";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-java";
