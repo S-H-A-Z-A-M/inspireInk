@@ -6,6 +6,7 @@ import { Footer } from "./components/index.ts";
 import { Outlet } from "react-router-dom";
 import { userApi } from "./axios.ts";
 import NavabarSpace from "./components/container/NavabarSpace.tsx";
+import { Skeleton } from "./components/ui/skeleton.tsx";
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +50,12 @@ function App() {
     </div>
   ) : (
     // </div>
-    <div>The content is still loading</div>
+    <div className="relative">
+      <Skeleton className="w-auto h-[60px] rounded-full mx-6 mt-6 mb-6" />
+      <Skeleton className="w-4/6 mx-auto h-[180px] rounded-lg  mt-1 mb-4" />
+      <Skeleton className="w-4/6 mx-auto h-[180px] rounded-lg  mt-1 mb-4" />
+      <Skeleton className="w-4/6 mx-auto h-[180px] rounded-lg  mt-1 mb-4" />
+    </div>
   );
 }
 

@@ -1,32 +1,19 @@
 import { Separator } from "@radix-ui/react-separator";
 
-function topBar({ setPosts, posts }: any) {
-  const sortBlogs = (criterion: string) => {
-    const sortedBlogs = [...posts].sort(
-      (a, b) => b[criterion].length - a[criterion].length
-    );
-    setPosts(sortedBlogs); // Update state with sorted blogs
-  };
-  const sortByNewest = () => {
-    const sortedBlogs = [...posts].sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-    setPosts(sortedBlogs);
-  };
+function topBar({ setSorting }: any) {
   return (
     <div className=" self-center mb-4 md:mb-0 lg:self-auto">
       <ul className="flex gap-4 lg:gap-10 text-lg">
         <Separator className="border border-pink-600" orientation="vertical" />
-        <button onClick={() => sortBlogs("commentedBy")}>
+        <button onClick={() => setSorting("comments")}>
           <li>Engaged</li>
         </button>
         <Separator className="border border-pink-600" orientation="vertical" />
-        <button onClick={() => sortBlogs("likedBy")}>
+        <button onClick={() => setSorting("likes")}>
           <li>Popular</li>
         </button>
         <Separator className="border border-pink-600" orientation="vertical" />
-        <button onClick={sortByNewest}>
+        <button onClick={() => setSorting("latest")}>
           <li>Latest</li>
         </button>
       </ul>

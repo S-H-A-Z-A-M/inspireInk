@@ -10,9 +10,9 @@ import { Separator } from "@radix-ui/react-separator";
 function PostCard({
   slug,
   title,
-  likedBy,
+  likeCount,
   content,
-  commentedBy,
+  commentCount,
   coverImage,
   isuserPage = false,
   handleEdit,
@@ -20,8 +20,7 @@ function PostCard({
   owner,
   createdAt,
 }: any) {
-  const userData = useSelector((state: any) => state.auth.userData);
-  console.log(owner);
+  const userData = useSelector((state: any) => state.auth.userData);;
   return (
     <div className="w-full max-w-[20rem]  sm:max-w-[25rem] md:max-w-[50rem] lg:max-w-[70rem] mx-auto overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300 mb-2 pb-4">
       <Link to={`/blog/${slug}`}>
@@ -56,8 +55,8 @@ function PostCard({
         <Separator className="border mx-9 border-gray-300 lg:border-none mt-2" />
         <div className="pl-10 mt-2   text-left lg:p-6 lg:flex lg:gap-4">
           <h2>Published at : {moment(createdAt).format("MMM Do YY")}</h2>
-          <h2>Likes: {likedBy.length}</h2>
-          <h2>Comments: {commentedBy.length}</h2>
+          <h2>Likes: {likeCount}</h2>
+          <h2>Comments: {commentCount}</h2>
         </div>
       </Link>
 

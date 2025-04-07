@@ -8,18 +8,38 @@ import Search from "@/components/container/Search";
 
 function Home() {
   const [posts, setPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [sorting, setSorting] = useState("latest");
+  const [search, setSearch] = useState("");
   useEffect(() => {
-    blogApi.get("/all-blogs").then((response) => {
-      if (response) {
-        setPosts(response.data.data.blogs);
-      }
-    });
-  }, []);
+    blogApi
+      .get("/all-blogs", {
+        params: { page: currentPage, sorting: sorting, search: search },
+      })
+      .then((response) => {
+        if (response) {
+          const {
+            blogs,
+            currentPage: resPage,
+            totalPages,
+          } = response.data.data;
+          setPosts(blogs);
+          if (resPage !== currentPage) {
+            setCurrentPage(resPage);
+          }
+          setTotalPages(totalPages);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [currentPage, sorting, search]); 
   return (
     <div className="w-full flex flex-col items-center">
       <div className="md:flex md:items-center md:justify-around md:w-full md:px-[40px] md:mb-4 lg:px-[120px]">
-        <TopBar setPosts={setPosts} posts={posts} />
-        <Search />
+        <TopBar setSorting={setSorting} />
+        <Search setSearch={setSearch} />
       </div>
       {/* <AppSidebar /> */}
       <Container>
@@ -29,7 +49,11 @@ function Home() {
               <PostCard {...post} />
             </div>
           ))}
-          <Pagniation />
+          <Pagniation
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
         </div>
       </Container>
     </div>
