@@ -20,7 +20,7 @@ function PostCard({
   owner,
   createdAt,
 }: any) {
-  const userData = useSelector((state: any) => state.auth.userData);;
+  const userData = useSelector((state: any) => state.auth.userData);
   return (
     <div className="w-full max-w-[20rem]  sm:max-w-[25rem] md:max-w-[50rem] lg:max-w-[70rem] mx-auto overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300 mb-2 pb-4">
       <Link to={`/blog/${slug}`}>
@@ -40,7 +40,7 @@ function PostCard({
             <img
               src={coverImage}
               alt={title}
-              className=" h-[150px] w-full md:h-[250px] lg:h-[200px] md:w-full lg:w-[300px] object-cover transform group-hover:scale-105 transition-transform duration-300 mb-4"
+              className=" h-[150px] w-full md:h-[250px] lg:h-[200px] md:w-full lg:w-[300px] transform group-hover:scale-105 transition-transform duration-300 mb-4"
             />
             <div className="lg:p-6 lg:mr-10 overflow-hidden">
               <h2 className="text-2xl lg:text-3xl font-semibold leading-tight mt-2 lg:mt-0">
