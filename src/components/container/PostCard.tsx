@@ -60,7 +60,7 @@ function PostCard({
         </div>
       </Link>
 
-      {isuserPage && userData && userData._id === owner && (
+      {isuserPage && userData && userData._id === owner._id && (
         <div className="flex justify-end gap-4 p-4 bg-gray-50">
           <Button
             onClick={() => handleEdit(slug)}
