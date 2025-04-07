@@ -11,7 +11,6 @@ const createComment = asyncHandler(async (req, res) => {
   const { content } = req.body;
   const { blogId } = req.params;
   const userId = req.user._id;
-  console.log(userId);
 
   if (!content || !blogId) {
     throw new ApiError(400, "Content and blogId must be provided");
@@ -126,7 +125,7 @@ const likeComment = asyncHandler(async (req, res) => {
   }
 
   await comment.save();
-  console.log(comment);
+
 
   return res
     .status(200)

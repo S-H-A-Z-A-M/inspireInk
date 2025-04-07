@@ -173,7 +173,6 @@ const googleRegister = asyncHandler(async (req, res) => {
   const { name, email, photoURL } = req.body;
 
   const user = await User.findOne({ email });
-  console.log(user);
   if (user) {
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
       user._id
@@ -439,7 +438,6 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
 const getUser = asyncHandler(async (req, res) => {
   const { username } = req.params;
-  console.log("The user id", username);
   if (!username) {
     throw new ApiError(400, "username is missing");
   }
@@ -470,7 +468,6 @@ const saveBlog = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  console.log(user.savedList);
 
   return res
     .status(200)

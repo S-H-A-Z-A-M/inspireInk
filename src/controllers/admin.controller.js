@@ -86,7 +86,6 @@ const googlelogin = asyncHandler(async (req, res) => {
   const decodedToken = await admin.auth().verifyIdToken(idToken);
   const email = decodedToken.email;
   const user = await User.findOne({ email });
-  console.log(user);
   if (user) {
     if (user.role !== "admin" && user.role !== "superadmin") {
       throw new ApiError(403, "Admin Access is required");
@@ -148,7 +147,6 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
   // Check if the password is correct
   const isPasswordValid = await user.isPasswordCorrect(password); // Assuming you have a method `isPasswordCorrect` in your schema for password comparison
-  console.log(isPasswordValid);
   if (!isPasswordValid) {
     throw new ApiError(401, "Invalid admin credentials");
   }
@@ -159,7 +157,6 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
   // Save the Refresh Token in the database
   user.RefreshToken = refreshToken;
-  console.log("Refresh Token saved in DB:", user.RefreshToken);
   await user.save();
 
   // Exclude sensitive data (password and RefreshToken) from the response
@@ -238,7 +235,6 @@ const getUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ username })
     .select("-password -RefreshToken -name -about -savedList")
     .lean();
-  console.log(user);
   if (!user) {
     throw new ApiError(404, "User not found");
   }
@@ -398,7 +394,6 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 const grantAdminRights = asyncHandler(async (req, res) => {
   const { username } = req.params;
-  console.log(username);
 
   const user = await User.findOne({ username });
 

@@ -8,8 +8,6 @@ import { DeleteCloudinaryAsset } from "../utils/deleteCloudinary.js";
 
 const createBlog = asyncHandler(async (req, res) => {
   const { title, content, slug } = req.body;
-
-  console.log(req.body);
   if (
     [title, content, slug].some((field) => {
       return field?.trim() === "";
@@ -121,7 +119,6 @@ const deleteBlogById = asyncHandler(async (req, res) => {
 
 const getBlogBySlug = asyncHandler(async (req, res) => {
   const { slug } = req.params;
-  console.log(slug);
 
   if (!slug) {
     throw new ApiError(400, "slug is missing");
@@ -157,7 +154,6 @@ const getAllBlogs = asyncHandler(async (req, res) => {
   const search = req.query.search || ""; // default search
   const limit = 8;
   const skip = (page - 1) * limit;
-  console.log("here")
 
   let sortStage = {};
 
@@ -298,7 +294,6 @@ const editBlog = asyncHandler(async (req, res) => {
 
 const likeBlog = asyncHandler(async (req, res) => {
   const { slug } = req.params;
-  console.log(slug);
   const user = req.user;
 
   if (!slug) {
