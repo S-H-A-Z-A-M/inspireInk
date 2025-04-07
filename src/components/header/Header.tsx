@@ -5,8 +5,8 @@ import { LuSquarePen } from "react-icons/lu";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 function Header() {
-  const authStatus = useSelector((state:any) => state.auth.status);
-  const userData = useSelector((state:any) => state.auth.userData);
+  const authStatus = useSelector((state: any) => state.auth.status);
+  const userData = useSelector((state: any) => state.auth.userData);
   const navigate = useNavigate();
 
   const navItems = [
@@ -36,12 +36,17 @@ function Header() {
           <div className="flex items-center gap-4">
             <Link to={"/"}>
               <img
-                className="h-[2.5rem]  lg:h-[4.2rem] rounded-full invert"
+                className="h-[2.5rem]  lg:h-[3.2rem] rounded-full invert"
                 src="/logo.png"
                 alt="insipre ink logo"
               />
             </Link>
-            <h2 className="text-white font-bold lg:text-3xl ">INSPIREINK</h2>
+            <h2
+              onClick={() => navigate("/")}
+              className="text-white font-bold lg:text-3xl "
+            >
+              INSPIREINK
+            </h2>
           </div>
           {/* put search box */}
           <ul className="flex justify-around items-center gap-6 lg:gap-8 text-white lg:text-lg">
@@ -89,9 +94,21 @@ function Header() {
                     </Link>
                   </MenuItem>
                   <MenuItem>
+                    <ul className="block py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none">
+                      {authStatus && (
+                        <Link
+                          to={`/users/savedBlogs/${userData?.username}`}
+                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                        >
+                          Saved Blogs
+                        </Link>
+                      )}
+                    </ul>
+                  </MenuItem>
+                  <MenuItem>
                     <ul className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none">
                       {authStatus && (
-                        <li className=" cursor-pointer" >
+                        <li className=" cursor-pointer">
                           <LogoutBtn />
                         </li>
                       )}

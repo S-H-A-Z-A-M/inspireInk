@@ -7,6 +7,12 @@ import { blogApi, userApi } from "@/axios";
 import CommentSection from "@/components/comments/CommentSection";
 import SideBar from "@/components/container/SideBar";
 import { login } from "@/store/authSlice";
+import Prism from "prismjs";
+import "prismjs/themes/prism.css";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-java";
+import "prismjs/components/prism-markup";
 
 type postSchema = {
   _id: string;
@@ -67,6 +73,7 @@ function Post() {
           setPost(postData);
           setLikesArray(postData.likedBy);
           setNoOfComments(postData.commentedBy.length);
+          Prism.highlightAll();
         } else {
           navigate("/");
         }
@@ -91,9 +98,9 @@ function Post() {
           <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 lg:p-2">
             <div className="rounded-lg bg-white  p-6 max-w-4xl w-full">
               {/* Image Section */}
-              <div className="w-full flex justify-center mb-6">
+              <div className="w-full flex justify-center mb-12 border">
                 <img
-                  className="rounded-xl h-[350px] w-[350px] object-cover lg:h-[700px] lg:w-[700px]"
+                  className="rounded-xl h-[350px] w-[350px] object-contain lg:h-auto lg:max-h-[400px] lg:w-[700px]"
                   src={post.coverImage}
                   alt="Post Cover"
                 />
@@ -102,12 +109,12 @@ function Post() {
               {/* Title and Content Section */}
               <div>
                 {/* Title */}
-                <h1 className="text-2xl mb-2 lg:text-4xl font-bold lg:text-center lg:mb-6">
+                <h1 className="text-2xl mb-2 lg:text-4xl font-bold lg:text-justify lg:mb-6 lg:px-12">
                   {post.title}
                 </h1>
 
                 {/* Content */}
-                <div className="browser-css text-lg lg:text-justify px-1 lg:px-6">
+                <div className="text-lg lg:text-justify px-1 lg:px-6 post-content prose prose-sm sm:prose lg:prose-lg max-w-none mx-auto">
                   {parse(post.content)}
                 </div>
               </div>

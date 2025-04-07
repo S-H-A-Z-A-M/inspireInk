@@ -16,6 +16,7 @@ import Post from "./pages/blogPages/Post.tsx";
 import UserDashboard from "./pages/userPages/UserDashboard.tsx";
 import EditUserPage from "./pages/userPages/EditUserPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import SavedList from "./pages/userPages/SavedList.tsx";
 
 const router = createBrowserRouter([
   {
@@ -79,6 +80,14 @@ const router = createBrowserRouter([
         element: (
           <Protected authentication={true}>
             <EditUserPage />
+          </Protected>
+        ),
+      },
+      {
+        path: "users/savedBlogs/:username",
+        element: (
+          <Protected authentication={true}>
+            <SavedList />
           </Protected>
         ),
       },

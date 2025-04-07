@@ -15,8 +15,8 @@ function topBar({ setPosts, posts }: any) {
     setPosts(sortedBlogs);
   };
   return (
-    <div className=" self-center mb-6">
-      <ul className="flex gap-4 text-lg">
+    <div className=" self-center mb-4 md:mb-0 lg:self-auto">
+      <ul className="flex gap-4 lg:gap-10 text-lg">
         <Separator className="border border-pink-600" orientation="vertical" />
         <button onClick={() => sortBlogs("commentedBy")}>
           <li>Engaged</li>

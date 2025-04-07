@@ -34,15 +34,15 @@ function Comment({ comment, onEdit, onDelete, onLike }: any) {
       <div className="mt-1">
         <img
           className="h-10 w-10 rounded-full"
-          src={comment.owner.profilePicURL}
-          alt={comment.owner.name}
+          src={comment.owner?.profilePicURL}
+          alt={comment.owner?.name}
         />
       </div>
       <div className="flex-grow ml-4">
         {comment && (
           <div className="mb-4">
             <div className="flex justify-between">
-              <p className="font-bold">{comment.owner.username}</p>
+              <p className="font-bold">{comment.owner?.username}</p>
               <p>Date: {moment(comment.createdAt).format("MMM Do YY")}</p>
             </div>
             {editMode ? (
@@ -73,7 +73,7 @@ function Comment({ comment, onEdit, onDelete, onLike }: any) {
                   </Button>
                   <p>{comment.NumberofLikes}</p>
                 </div>
-                {userData && userData._id === comment.owner._id && (
+                {userData && userData._id === comment.owner?._id && (
                   <div className="flex gap-4">
                     <Button className="" onClick={handleEdit}>
                       Edit

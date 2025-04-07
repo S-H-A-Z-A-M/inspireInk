@@ -21,12 +21,13 @@ function PostCard({
   createdAt,
 }: any) {
   const userData = useSelector((state: any) => state.auth.userData);
+  console.log(owner);
   return (
-    <div className="w-full max-w-[70rem] mx-auto overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300 mb-2">
+    <div className="w-full max-w-[20rem]  sm:max-w-[25rem] md:max-w-[50rem] lg:max-w-[70rem] mx-auto overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300 mb-2 pb-4">
       <Link to={`/blog/${slug}`}>
         <div className=" p-6 flex items-center gap-4">
           <img
-            className=" rounded-full h-8 w-8"
+            className="rounded-full h-8 w-8"
             src={owner.profilePicURL}
             alt={`${owner.name}'s profile`}
           />
@@ -40,13 +41,13 @@ function PostCard({
             <img
               src={coverImage}
               alt={title}
-              className=" h-[300px] w-full lg:h-[200px] lg:w-[250px] object-cover transform group-hover:scale-105 transition-transform duration-300"
+              className=" h-[150px] w-full md:h-[250px] lg:h-[200px] md:w-full lg:w-[300px] object-cover transform group-hover:scale-105 transition-transform duration-300 mb-4"
             />
-            <div className="lg:p-6 lg:mr-10">
-              <h2 className="text-2xl lg:text-3xl font-semibold leading-tight mt-2 lg:mt-0 ">
+            <div className="lg:p-6 lg:mr-10 overflow-hidden">
+              <h2 className="text-2xl lg:text-3xl font-semibold leading-tight mt-2 lg:mt-0">
                 {title}
               </h2>
-              <p className="browser-css sm:text-base pl-2 lg:text-lg line-clamp-2 mt-4">
+              <p className="sm:text-base pl-2 lg:text-lg line-clamp-2 mt-4">
                 {parse(content)}
               </p>
             </div>
