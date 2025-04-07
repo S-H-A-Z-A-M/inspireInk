@@ -161,7 +161,7 @@ const getAllBlogs = asyncHandler(async (req, res) => {
     .skip(skip)
     .limit(limit)
     .populate([
-      { path: "owner", select: "username profilePicUrl name" }, // Adjust field names if needed
+      { path: "owner", select: "username profilePicURL name" }, // Adjust field names if needed
     ])
     .exec();
 

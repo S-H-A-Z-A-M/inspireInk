@@ -55,7 +55,7 @@ const refreshaccessToken = asyncHandler(async (req, res) => {
     const options = {
       httpOnly: true,
       secure: true,
-      sameSite: 'None',
+      sameSite: "None",
     };
 
     const { accessToken, newrefreshToken } =
@@ -139,7 +139,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
-    sameSite: 'None',
+    sameSite: "None",
   };
 
   // Remove sensitive fields and retrieve created user
@@ -189,7 +189,7 @@ const googleRegister = asyncHandler(async (req, res) => {
     const options = {
       httpOnly: true,
       secure: true,
-      sameSite: 'None',
+      sameSite: "None",
     };
 
     return res
@@ -239,7 +239,7 @@ const googleRegister = asyncHandler(async (req, res) => {
     const options = {
       httpOnly: true,
       secure: true,
-      sameSite: 'None',
+      sameSite: "None",
     };
 
     // Remove sensitive fields and retrieve created user
@@ -308,7 +308,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
   const options = {
     httpOnly: true, // Accessible only by the web server
     secure: true,
-    sameSite: 'None',
+    sameSite: "None",
   };
 
   // Send response
@@ -343,7 +343,7 @@ const logoutUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
-    sameSite: 'None',
+    sameSite: "None",
   };
 
   return res
@@ -485,7 +485,14 @@ const getAllBlogsByUser = asyncHandler(async (req, res) => {
   }
 
   const user = await User.findOne({ username: username })
-    .populate("blogList")
+    .populate({
+      path: "blogList",
+      populate: {
+        path: "owner",
+        model: "User",
+        select: "profilePicURL", // only this field will be included
+      },
+    })
     .exec();
 
   if (!user) {
@@ -505,7 +512,14 @@ const getAllSavedBlogs = asyncHandler(async (req, res) => {
   }
 
   const user = await User.findOne({ username: username })
-    .populate("savedList")
+    .populate({
+      path: "savedList",
+      populate: {
+        path: "owner",
+        model: "User",
+        select: "profilePicURL", // only this field will be included
+      },
+    })
     .exec();
 
   if (!user) {
