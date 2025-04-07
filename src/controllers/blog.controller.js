@@ -152,20 +152,75 @@ const getBlogById = asyncHandler(async (req, res) => {
 });
 
 const getAllBlogs = asyncHandler(async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
+  const page = Math.max(1, parseInt(req.query.page)) || 1;
+  const sorting = req.query.sorting || "latest"; // default sorting
+  const search = req.query.search || ""; // default search
   const limit = 8;
   const skip = (page - 1) * limit;
+  console.log("here")
 
-  const blogs = await Blog.find()
-    .sort({ updatedAt: -1 })
-    .skip(skip)
-    .limit(limit)
-    .populate([
-      { path: "owner", select: "username profilePicURL name" }, // Adjust field names if needed
-    ])
-    .exec();
+  let sortStage = {};
 
-  const totalBlogs = await Blog.countDocuments();
+  if (sorting === "latest") {
+    sortStage = { updatedAt: -1 };
+  } else if (sorting === "likes") {
+    sortStage = { likeCount: -1 };
+  } else if (sorting === "comments") {
+    sortStage = { commentCount: -1 };
+  }
+
+  const blogs = await Blog.aggregate([
+    {
+      $addFields: {
+        likeCount: { $size: { $ifNull: ["$likedBy", []] } },
+        commentCount: { $size: { $ifNull: ["$commentedBy", []] } },
+      },
+    },
+    {
+      $match: {
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { content: { $regex: search, $options: "i" } },
+        ],
+      },
+    },
+    {
+      $sort: sortStage,
+    },
+    { $skip: skip },
+    { $limit: limit },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "owner",
+      },
+    },
+    { $unwind: "$owner" },
+    {
+      $project: {
+        title: 1,
+        content: 1,
+        updatedAt: 1,
+        slug: 1,
+        likeCount: 1,
+        commentCount: 1,
+        coverImage: 1,
+        createdAt: 1,
+        "owner.username": 1,
+        "owner.name": 1,
+        "owner.profilePicURL": 1,
+      },
+    },
+  ]);
+
+  const totalBlogs = await Blog.countDocuments({
+    $or: [
+      { title: { $regex: search, $options: "i" } },
+      { content: { $regex: search, $options: "i" } },
+    ],
+  });
 
   return res.status(200).json(
     new ApiResponse(
