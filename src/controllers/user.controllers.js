@@ -468,7 +468,6 @@ const saveBlog = asyncHandler(async (req, res) => {
 
   await user.save();
 
-
   return res
     .status(200)
     .json(new ApiResponse(200, user, "Blog saved successfully"));
