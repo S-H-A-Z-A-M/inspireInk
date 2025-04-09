@@ -12,9 +12,7 @@ function Home() {
   const [totalPages, setTotalPages] = useState(0);
   const [sorting, setSorting] = useState("latest");
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    setLoading(true);
     blogApi
       .get("/all-blogs", {
         params: { page: currentPage, sorting: sorting, search: search },
@@ -32,7 +30,6 @@ function Home() {
           }
           setTotalPages(totalPages);
         }
-        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
