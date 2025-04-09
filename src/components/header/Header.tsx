@@ -94,25 +94,21 @@ function Header() {
                     </Link>
                   </MenuItem>
                   <MenuItem>
-                    <ul className="block py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none">
-                      {authStatus && (
-                        <Link
-                          to={`/users/savedBlogs/${userData?.username}`}
-                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                        >
-                          Saved Blogs
-                        </Link>
-                      )}
-                    </ul>
+                    {authStatus && (
+                      <Link
+                        to={`/users/savedBlogs/${userData?.username}`}
+                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                      >
+                        Saved Blogs
+                      </Link>
+                    )}
                   </MenuItem>
                   <MenuItem>
-                    <ul className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none">
-                      {authStatus && (
-                        <li className=" cursor-pointer">
-                          <LogoutBtn />
-                        </li>
-                      )}
-                    </ul>
+                    {authStatus && (
+                      <div className=" cursor-pointer">
+                        <LogoutBtn />
+                      </div>
+                    )}
                   </MenuItem>
                 </MenuItems>
               </Menu>

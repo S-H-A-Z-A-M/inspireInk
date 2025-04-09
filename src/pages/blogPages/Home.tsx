@@ -12,7 +12,9 @@ function Home() {
   const [totalPages, setTotalPages] = useState(0);
   const [sorting, setSorting] = useState("latest");
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
+    setLoading(true);
     blogApi
       .get("/all-blogs", {
         params: { page: currentPage, sorting: sorting, search: search },
@@ -30,25 +32,45 @@ function Home() {
           }
           setTotalPages(totalPages);
         }
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [currentPage, sorting, search]); 
+  }, [currentPage, sorting, search]);
   return (
     <div className="w-full flex flex-col items-center">
       <div className="md:flex md:items-center md:justify-around md:w-full md:px-[40px] md:mb-4 lg:px-[120px]">
-        <TopBar setSorting={setSorting} />
-        <Search setSearch={setSearch} />
+        <TopBar setSorting={setSorting} sorting={sorting} />
+        <Search
+          setSearch={setSearch}
+          search={search}
+          setSorting={sorting}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
+      {search !== "" && (
+        <div>
+          <h1 className="text-2xl text-center mb-4 md:mb-0">
+            The results for: <span className="font-bold">{search}</span>
+          </h1>
+        </div>
+      )}
       {/* <AppSidebar /> */}
       <Container>
         <div className="flex flex-col gap-5">
-          {posts.map((post: any) => (
-            <div key={post._id} className="">
-              <PostCard {...post} />
+          {posts.length > 0 ? (
+            posts.map((post: any) => (
+              <div key={post._id} className="">
+                <PostCard {...post} />
+              </div>
+            ))
+          ) : (
+            <div className="flex flex-col h-72 items-center justify-center">
+              <p className="text-xl font-bold">No blogs found.</p>
+              <p>Please try some other keywords or check your spelling.</p>
             </div>
-          ))}
+          )}
           <Pagniation
             totalPages={totalPages}
             currentPage={currentPage}

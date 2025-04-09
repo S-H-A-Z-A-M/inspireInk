@@ -10,9 +10,9 @@ import { Separator } from "@radix-ui/react-separator";
 function PostCard({
   slug,
   title,
-  likeCount,
+  likedBy,
   content,
-  commentCount,
+  commentedBy,
   coverImage,
   isuserPage = false,
   handleEdit,
@@ -55,8 +55,8 @@ function PostCard({
         <Separator className="border mx-9 border-gray-300 lg:border-none mt-2" />
         <div className="pl-10 mt-2   text-left lg:p-6 lg:flex lg:gap-4">
           <h2>Published at : {moment(createdAt).format("MMM Do YY")}</h2>
-          <h2>Likes: {likeCount}</h2>
-          <h2>Comments: {commentCount}</h2>
+          <h2>Likes: {likedBy?.length || 0}</h2>
+          <h2>Comments: {commentedBy?.length || 0}</h2>
         </div>
       </Link>
 

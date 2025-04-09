@@ -128,7 +128,7 @@ function Post() {
                 </h1>
 
                 {/* Content */}
-                <div className="text-lg lg:text-justify px-1 lg:px-6 prose prose-sm sm:prose lg:prose-lg max-w-none mx-auto">
+                <div className="text-lg lg:text-justify px-1 lg:px-6 prose sm:prose lg:prose-lg max-w-none mx-auto">
                   {parse(post.content)}
                 </div>
               </div>
